@@ -1,5 +1,5 @@
-import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
+const { Sequelize } = require("sequelize");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -27,14 +27,14 @@ const hrSequelize = new Sequelize(
     dialectOptions: {
       options: {
         encrypt: false,
-        trustServerCertificate: true, 
+        trustServerCertificate: true,
       },
     },
     logging: false,
   }
 );
 
-// Kiểm tra kết nối
+
 const connectDB = async () => {
   try {
     await payrollSequelize.authenticate();
@@ -47,4 +47,9 @@ const connectDB = async () => {
   }
 };
 
-export { payrollSequelize, hrSequelize, connectDB };
+
+module.exports = {
+  payrollSequelize,
+  hrSequelize,
+  connectDB,
+};

@@ -1,36 +1,30 @@
-import express from "express";
-import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
-import { connectDB } from "./config/database.js";
-import { EventEmitter } from "events";
+const express = require("express");
+const dotenv = require("dotenv");
+const path = require("path");
+const { connectDB } = require("./config/database.js");
+const EventEmitter = require("events");
 
 dotenv.config();
 
-// Tăng giới hạn listeners để tránh cảnh báo
 EventEmitter.defaultMaxListeners = 20;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3000;
 
-// Kết nối database
-await connectDB();
+const startServer = async () => {
+  await connectDB(); 
 
-app.use(express.static("public"));
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug");
+  app.use(express.static("public"));
+  app.set("views", path.join(__dirname, "views"));
+  app.set("view engine", "pug");
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+  app.get("/", (req, res) => {
+    res.send("Hello World!");
+  });
 
-app.get("/admin", (req, res) => {
-  res.send("Hello admin!");
-});
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+};
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+startServer();
