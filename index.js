@@ -22,9 +22,6 @@ const startServer = async () => {
   app.use(expressLayouts);
   app.set('layout', 'layouts/default');
 
-  app.get("/", (req, res) => {
-    res.send("Hello World!");
-  });
   router(app);
   app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
