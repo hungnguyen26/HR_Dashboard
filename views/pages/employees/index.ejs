@@ -3,7 +3,50 @@
     <div class="col-12 mx-auto">
       <div class="d-flex justify-content-between">
         <h2>Quản Lý Nhân Viên</h2>
-        <a href="âsdasdasd" class="btn btn-primary">Thêm Nhân Viên</a>
+        <a href="/employees/create" class="btn btn-primary">Thêm Nhân Viên</a>
+      </div>
+      <hr />
+
+      <div class="card mb-3">
+        <div class="card-header">Bộ lọc và tìm kiếm</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <button
+                class="btn btn-sm ml-1 btn-outline-success active"
+                button-status=""
+              >
+                Tất cả</button
+              ><button
+                class="btn btn-sm ml-1 btn-outline-success"
+                button-status="active"
+              >
+                Hoạt động</button
+              ><button
+                class="btn btn-sm ml-1 btn-outline-success"
+                button-status="inactive"
+              >
+                Dừng hoạt động
+              </button>
+            </div>
+            <div class="col-6">
+              <form id="form-search">
+                <div class="input-group">
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Nhập từ khóa"
+                    name="keyword"
+                    value=""
+                  />
+                  <div class="input-group-appent">
+                    <button class="btn btn-success" type="submit">Tìm</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
 
       <hr />
@@ -13,33 +56,88 @@
           <tr>
             <th scope="col">ID</th>
             <th scope="col">Họ Tên</th>
+            <th scope="col">Ngày sinh</th>
+            <th scope="col">Giới tính</th>
             <th scope="col">Email</th>
             <th scope="col">Số điện thoại</th>
             <th scope="col">Tên phòng ban</th>
             <th scope="col">Chức vụ</th>
-            <!-- <th scope="col">Ngày nhận việc</th>
-            <th scope="col">Lương cơ bản</th> -->
             <th scope="col">Trạng thái</th>
             <th scope="col">Hoạt động</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th scope="row">1</th>
-            <td>Nguyen Huu Hung</td>
-            <td>nhh@gmail.com</td>
-            <td>12345</td>
-            <td>ADMIN</td>
-            <td>ADMIN</td>
+            <td>2</td>
+            <td>Trần Thị B</td>
+            <td>1995-08-22</td>
+            <td>Nữ</td>
+            <td>tranthib@example.com</td>
+            <td>0912345678</td>
+            <td>Phòng Nhân Sự</td>
+            <td>Chuyên viên nhân sự</td>
             <td>Hoạt động</td>
             <td >
-              <a href="" class="btn btn-success">Xem</a>
-              <a href="" class="btn btn-warning mx-2">Cập nhật</a>
-              <a href="" class="btn btn-danger">Xóa</a>
+              <a href="" class="btn btn-success" style="
+              font-size: xx-small;
+          ">
+                <i class="fa-solid fa-eye"></i>
+              </a>
+              <a href="" class="btn btn-warning mx-2" style="
+              font-size: xx-small;
+          ">
+                <i class="fa-solid fa-pen-nib"></i>
+              </a>
+              <a href="" class="btn btn-danger" style="
+              font-size: xx-small;
+          ">
+                <i class="fa-solid fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Nguyễn Văn A</td>
+            <td>1990-05-15</td>
+            <td>Nam</td>
+            <td>nguyenvana@example.com</td>
+            <td>0901234567</td>
+            <td>Phòng Kỹ Thuật</td>
+            <td>Kỹ Sư Phần Mềm</td>
+            <td>Hoạt động</td>
+            <td >
+              <a href="" class="btn btn-success" style="
+              font-size: xx-small;
+          ">
+                <i class="fa-solid fa-eye"></i>
+              </a>
+              <a href="" class="btn btn-warning mx-2" style="
+              font-size: xx-small;
+          ">
+                <i class="fa-solid fa-pen-nib"></i>
+              </a>
+              <a href="" class="btn btn-danger" style="
+              font-size: xx-small;
+          ">
+                <i class="fa-solid fa-trash"></i>
+              </a>
             </td>
           </tr>
         </tbody>
       </table>
+      <nav>
+        <ul class="pagination">
+          <li class="page-item active">
+            <button
+              class="page-link"
+              button-pagination="1"
+              fdprocessedid="x68la"
+            >
+              1
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </div>

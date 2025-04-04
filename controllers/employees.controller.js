@@ -5,3 +5,10 @@ module.exports.index = async (req,res)=>{
         pageTitle: "Quản lý nhân viên"
     });
 }
+
+// [GET] /employees/create
+module.exports.createEmployees = async (req,res)=>{
+    res.render("pages/employees/create.ejs", {
+        pageTitle: "Thêm nhân viên"
+    });
+}
