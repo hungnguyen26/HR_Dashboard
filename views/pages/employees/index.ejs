@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12 mx-auto">
       <div class="d-flex justify-content-between">
-        <h2>Quản Lý Nhân Viên</h2>
+        <h4>Quản Lý Nhân Viên</h4>
         <a href="/employees/create" class="btn btn-primary">Thêm Nhân Viên</a>
       </div>
       <hr />
@@ -67,62 +67,30 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>2</td>
-            <td>Trần Thị B</td>
-            <td>1995-08-22</td>
-            <td>Nữ</td>
-            <td>tranthib@example.com</td>
-            <td>0912345678</td>
-            <td>Phòng Nhân Sự</td>
-            <td>Chuyên viên nhân sự</td>
-            <td>Hoạt động</td>
-            <td >
-              <a href="" class="btn btn-success" style="
-              font-size: xx-small;
-          ">
-                <i class="fa-solid fa-eye"></i>
-              </a>
-              <a href="" class="btn btn-warning mx-2" style="
-              font-size: xx-small;
-          ">
-                <i class="fa-solid fa-pen-nib"></i>
-              </a>
-              <a href="" class="btn btn-danger" style="
-              font-size: xx-small;
-          ">
-                <i class="fa-solid fa-trash"></i>
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Nguyễn Văn A</td>
-            <td>1990-05-15</td>
-            <td>Nam</td>
-            <td>nguyenvana@example.com</td>
-            <td>0901234567</td>
-            <td>Phòng Kỹ Thuật</td>
-            <td>Kỹ Sư Phần Mềm</td>
-            <td>Hoạt động</td>
-            <td >
-              <a href="" class="btn btn-success" style="
-              font-size: xx-small;
-          ">
-                <i class="fa-solid fa-eye"></i>
-              </a>
-              <a href="" class="btn btn-warning mx-2" style="
-              font-size: xx-small;
-          ">
-                <i class="fa-solid fa-pen-nib"></i>
-              </a>
-              <a href="" class="btn btn-danger" style="
-              font-size: xx-small;
-          ">
-                <i class="fa-solid fa-trash"></i>
-              </a>
-            </td>
-          </tr>
+          <% cleanEmployees.forEach(employee => { %>
+            <tr>
+              <td><%= employee.EmployeeID %></td>
+              <td><%= employee.FullName %></td>
+              <td><%= employee.DateOfBirth %></td>
+              <td><%= employee.Gender %></td>
+              <td><%= employee.Email %></td>
+              <td><%= employee.PhoneNumber %></td>
+              <td><%= employee.DepartmentName %></td>
+              <td><%= employee.PositionName %></td>
+              <td><%= employee.Status %></td>
+              <td>
+                <a href="/employees/<%= employee.EmployeeID %>" class="btn btn-success" style="font-size: xx-small;">
+                  <i class="fa-solid fa-eye"></i>
+                </a>
+                <a href="/employees/edit/<%= employee.EmployeeID %>" class="btn btn-warning mx-2" style="font-size: xx-small;">
+                  <i class="fa-solid fa-pen-nib"></i>
+                </a>
+                <a href="/employees/delete/<%= employee.EmployeeID %>" class="btn btn-danger" style="font-size: xx-small;">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+          <% }); %>
         </tbody>
       </table>
       <nav>
