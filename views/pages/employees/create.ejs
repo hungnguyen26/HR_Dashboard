@@ -1,25 +1,129 @@
 <div class="mt-5">
-    <div class="row">
-      <div class="col-12 mx-auto">
-        <div class="d-flex justify-content-between">
-          <h4>Thêm nhân viên</h4>
-        </div>
-  
-        <hr />
-        <form action="/employees/create" method="POST" style="width: 40%; margin: 0 auto;">
-          <div class="form-group">
-            <label for="departmentName">Tên nhân viên</label>
-            <input type="text" class="form-control" id="departmentName" name="departmentName" placeholder="Nhập tên nhân viên" required>
-          </div>
-  
-          <div class="form-group">
-            <label for="managerId">ID người quản lý (nếu có)</label>
-            <input type="number" class="form-control" id="managerId" name="managerId" placeholder="Nhập ID người quản lý">
-          </div>
-  
-          <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
-        </form>
+  <div class="row">
+    <div class="col-12 mx-auto">
+      <div class="d-flex justify-content-between">
+        <h4>Thêm nhân viên</h4>
+        <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
       </div>
+
+      <hr />
+
+      <form
+        action="/employees/create"
+        method="POST"
+        style="width: 60%; margin: 0 auto"
+      >
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="FullName">Họ tên</label>
+            <input
+              type="text"
+              class="form-control"
+              id="FullName"
+              name="FullName"
+              placeholder="Nhập họ tên"
+              required
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="DateOfBirth">Ngày sinh</label>
+            <input
+              type="date"
+              class="form-control"
+              id="DateOfBirth"
+              name="DateOfBirth"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="Email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="Email"
+            name="Email"
+            placeholder="Nhập email"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="PhoneNumber">SĐT</label>
+            <input
+              type="text"
+              class="form-control"
+              id="PhoneNumber"
+              name="PhoneNumber"
+              placeholder="Nhập số điện thoại"
+              required
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="Gender">Giới tính</label>
+            <select class="form-control" id="Gender" name="Gender" required>
+              <option value="">Chọn giới tính</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="HireDate">Ngày vào công ty</label>
+            <input
+              type="date"
+              class="form-control"
+              id="HireDate"
+              name="HireDate"
+              required
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="DepartmentID">Phòng ban</label>
+            <select
+              class="form-control"
+              id="DepartmentID"
+              name="DepartmentID"
+              required
+            >
+              <option value="">Chọn phòng ban</option>
+              <option value="Hành chính">Hành chính</option>
+              <option value="Kỹ thuật">Kỹ thuật</option>
+              <option value="Kinh doanh">Kinh doanh</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="PositionID">Chức vụ</label>
+            <select class="form-control" id="PositionID" name="PositionID" required>
+              <option value="">Chọn chức vụ</option>
+              <option value="Nhân viên">Nhân viên</option>
+              <option value="Trưởng phòng">Trưởng phòng</option>
+              <option value="Giám đốc">Giám đốc</option>
+              <!-- Thêm tùy chọn khác nếu cần -->
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="Status">Trạng thái</label>
+            <select class="form-control" id="Status" name="Status" required>
+              <option value="">Chọn trạng thái</option>
+              <option value="Đang làm việc">Đang làm việc</option>
+              <option value="Nghỉ việc">Nghỉ việc</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">
+          Thêm nhân viên
+        </button>
+      </form>
     </div>
   </div>
-  
+</div>

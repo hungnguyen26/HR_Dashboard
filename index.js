@@ -8,6 +8,10 @@ const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser');
 const moment = require("moment")
 
+const flash = require("express-flash");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+
 dotenv.config();
 
 EventEmitter.defaultMaxListeners = 20;
@@ -24,6 +28,13 @@ const startServer = async () => {
 
   app.set("views", path.join(__dirname, "views"));
   app.set("view engine", "ejs");
+
+  // flash - thông báo FE
+  app.use(cookieParser("djkhajksdhjkas"));
+  app.use(session({ cookie: { maxAge: 60000 } }));
+  app.use(flash());
+  // end flash
+
   app.use(expressLayouts);
   app.set('layout', 'layouts/default');
 

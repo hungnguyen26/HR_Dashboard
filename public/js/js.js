@@ -15,3 +15,19 @@ if (formSearch) {
   });
 }
 //end  form search
+
+// thông báo
+const short_alert = document.querySelector("[show-alert]");
+if (short_alert) {
+  const time = parseInt(short_alert.getAttribute("data-time"));
+  setTimeout(() => {
+    short_alert.classList.add("alert-hidden");
+  }, time);
+
+  const btnCloseAlert = short_alert.querySelector("[close-alert]");
+
+  btnCloseAlert.addEventListener("click", () => {
+    short_alert.classList.add("alert-hidden");
+  });
+}
+//end thông báo

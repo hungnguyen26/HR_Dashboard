@@ -1,0 +1,15 @@
+<% if (messages && messages.thanhcong) { %>
+<div class="message info">
+  <div data-time="<%= time %>" class="alert alert-success" show-alert>
+    <%= messages.thanhcong %>
+    <i class="fa-regular fa-circle-xmark" close-alert></i>
+  </div>
+</div>
+<% } %> <% if (messages && messages.thatbai) { %>
+<div class="message info">
+  <div data-time="<%= time %>" class="alert alert-danger" show-alert>
+    <%= messages.thatbai %>
+    <i class="fa-regular fa-circle-xmark" close-alert></i>
+  </div>
+</div>
+<% } %>

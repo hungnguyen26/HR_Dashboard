@@ -7,4 +7,6 @@ router.get('/', controller.index);
 
 router.get('/create', controller.createEmployees);
 
+router.post('/create', controller.createEmployeesPost);
+
 module.exports = router;
