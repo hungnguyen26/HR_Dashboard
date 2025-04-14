@@ -7,4 +7,6 @@ router.get('/', controller.index);
 
 router.get('/create', controller.createDepartment);
 
+router.post('/create', controller.createDepartmentPost);
+
 module.exports = router;

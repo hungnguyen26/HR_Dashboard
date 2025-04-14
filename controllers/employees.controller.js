@@ -1,4 +1,6 @@
 const { Employee } = require("../model/human/index.model");
+const searchHelper = require("../helpers/search");
+
 
 // [GET] /employees
 module.exports.index = async (req, res) => {

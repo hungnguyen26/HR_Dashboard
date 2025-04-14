@@ -13,38 +13,26 @@
             <tr>
               <th scope="col">ID</th>
               <th scope="col">Tên Phòng Ban</th>
-              <th scope="col">Người Quản Lý</th>
-              <th scope="col">SL Nhân Viên</th>
+              <th scope="col">Ngày tạo</th>
+              <th scope="col">Ngày cập nhật</th>
               <th scope="col">Hoạt động</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Kế Toán</td>
-              <td>
-                <div>hung</div>
-                <div>nhh@gmail.com</div>
-              </td>
-              <td>12</td>
-              <td >
-                <a href="" class="btn btn-warning mx-2">Cập nhật</a>
-                <a href="" class="btn btn-danger">Xóa</a>
-              </td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>IT</td>
+            <% cleanDepartments.forEach(department => { %>
+              <tr>
+                <td scope="row"><%= department.DepartmentID %></td>
+                <td><%= department.DepartmentName %></td>
+                <td><%= moment(department.CreatedAt).format('DD/MM/YYYY HH:mm:ss') %></td>
+                <td><%= moment(department.UpdatedAt).format('DD/MM/YYYY HH:mm:ss') %></td>
+
+
                 <td>
-                  <div>Le Van A</div>
-                  <div>levana@gmail.com</div>
-                </td>
-                <td>18</td>
-                <td >
-                  <a href="" class="btn btn-warning mx-2">Cập nhật</a>
-                  <a href="" class="btn btn-danger">Xóa</a>
+                  <a href="/departments/edit/<%= department.DepartmentID %>" class="btn btn-warning mx-2">Cập nhật</a>
+                  <a href="/departments/delete/<%= department.DepartmentID %>" class="btn btn-danger">Xóa</a>
                 </td>
               </tr>
+            <% }); %>
           </tbody>
         </table>
       </div>

@@ -6,6 +6,7 @@ const EventEmitter = require("events");
 const router = require("./routers/index.router.js");
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser');
+const moment = require("moment")
 
 dotenv.config();
 
@@ -18,6 +19,9 @@ const startServer = async () => {
   await connectDB(); 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(express.static("public"));
+
+  app.locals.moment = moment;
+
   app.set("views", path.join(__dirname, "views"));
   app.set("view engine", "ejs");
   app.use(expressLayouts);
