@@ -85,16 +85,11 @@
           </div>
           <div class="form-group col-md-6">
             <label for="DepartmentID">Phòng ban</label>
-            <select
-              class="form-control"
-              id="DepartmentID"
-              name="DepartmentID"
-              required
-            >
+            <select class="form-control" id="DepartmentID" name="DepartmentID" required>
               <option value="">Chọn phòng ban</option>
-              <option value="Hành chính">Hành chính</option>
-              <option value="Kỹ thuật">Kỹ thuật</option>
-              <option value="Kinh doanh">Kinh doanh</option>
+              <% departments.forEach(dept => { %>
+                <option value="<%= dept.DepartmentID %>"><%= dept.DepartmentName %></option>
+              <% }) %>
             </select>
           </div>
         </div>
@@ -104,10 +99,9 @@
             <label for="PositionID">Chức vụ</label>
             <select class="form-control" id="PositionID" name="PositionID" required>
               <option value="">Chọn chức vụ</option>
-              <option value="Nhân viên">Nhân viên</option>
-              <option value="Trưởng phòng">Trưởng phòng</option>
-              <option value="Giám đốc">Giám đốc</option>
-              <!-- Thêm tùy chọn khác nếu cần -->
+              <% positions.forEach(pos => { %>
+                <option value="<%= pos.PositionID %>"><%= pos.PositionName %></option>
+              <% }) %>
             </select>
           </div>
           <div class="form-group col-md-6">

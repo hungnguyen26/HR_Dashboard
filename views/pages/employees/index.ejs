@@ -3,7 +3,10 @@
     <div class="col-12 mx-auto">
       <div class="d-flex justify-content-between">
         <h4>Quản Lý Nhân Viên</h4>
-        <a href="/employees/create" class="btn btn-primary">Thêm Nhân Viên</a>
+        <div>
+          <a href="/employees/create" class="btn btn-primary">Thêm Nhân Viên</a>
+          <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
+        </div>
       </div>
       
       <hr />
