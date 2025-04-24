@@ -6,10 +6,13 @@ const { where } = require("sequelize");
 // [GET] /employees
 module.exports.index = async (req, res) => {
   try {
-    const { EmployeeID, FullName, DepartmentID, PositionID } = req.query;
+    const { EmployeeID, FullName, DepartmentID, PositionID, page = 1 } = req.query;
+
+    const limit = 5; 
+    const offset = (page - 1) * limit;
 
     const searchConditions = {};
-    
+
     if (EmployeeID) {
       searchConditions.EmployeeID = EmployeeID;
     }
@@ -19,6 +22,7 @@ module.exports.index = async (req, res) => {
         [dbHuman.Sequelize.Op.like]: `%${FullName}%`,
       };
     }
+
     if (DepartmentID) {
       searchConditions.DepartmentID = DepartmentID;
     }
@@ -27,18 +31,18 @@ module.exports.index = async (req, res) => {
       searchConditions.PositionID = PositionID;
     }
 
+    const totalCount = await dbHuman.Employee.count({
+      where: searchConditions,
+    });
+
     const employees = await dbHuman.Employee.findAll({
       where: searchConditions,
       include: [
-        {
-          model: dbHuman.Department,
-          required: false,
-        },
-        {
-          model: dbHuman.Position,
-          required: false,
-        },
+        { model: dbHuman.Department, required: false },
+        { model: dbHuman.Position, required: false },
       ],
+      limit,
+      offset,
     });
 
     const cleanEmployees = employees.map((employee) => employee.dataValues);
@@ -46,15 +50,23 @@ module.exports.index = async (req, res) => {
     const departments = await dbHuman.Department.findAll();
     const positions = await dbHuman.Position.findAll();
 
+    const totalPage = Math.ceil(totalCount / limit);
+
     res.render("pages/employees/index.ejs", {
       pageTitle: "Quản lý nhân viên",
       cleanEmployees,
-      departments,  
-      positions,   
+      departments,
+      positions,
       query: req.query,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPage,
+      },
     });
   } catch (error) {
     console.log(error);
+    req.flash("thatbai", "Có lỗi xảy ra!");
+      return res.redirect("back");
   }
 };
 
