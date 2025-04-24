@@ -11,6 +11,7 @@ const moment = require("moment")
 const flash = require("express-flash");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const methodOverride = require("method-override");
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ const startServer = async () => {
   await connectDB(); 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(express.static("public"));
+  app.use(methodOverride("_method"));
 
   app.locals.moment = moment;
 

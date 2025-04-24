@@ -13,5 +13,7 @@ router.get('/edit/:id', controller.updateEmployees);
 
 router.post('/edit/:id', controller.updateEmployeesPost);
 
+router.delete('/delete/:id', controller.deleteEmployee);
+
 
 module.exports = router;

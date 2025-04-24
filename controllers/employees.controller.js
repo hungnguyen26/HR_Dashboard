@@ -235,3 +235,37 @@ module.exports.updateEmployeesPost = async (req, res) => {
   }
 };
 
+// [DELETE] /employees/delete/:id
+module.exports.deleteEmployee = async (req, res) => {
+  const employeeID = req.params.id;
+
+  try {
+    const dividend = await dbHuman.Dividend.findOne({
+      where: { EmployeeID: employeeID }
+    });
+    // console.log("===========Dividend model:", dbHuman.Dividend);
+    const payroll = await dbPayroll.Salary.findOne({
+      where: { EmployeeID: employeeID }
+    });
+
+    if (dividend || payroll) {
+      req.flash("thatbai", "Không thể xóa nhân viên do có dữ liệu liên quan (lương hoặc cổ tức)!");
+      return res.redirect("/employees");
+    }
+
+    await dbPayroll.Employee.destroy({
+      where: { EmployeeID: employeeID }
+    });
+
+    await dbHuman.Employee.destroy({
+      where: { EmployeeID: employeeID }
+    });
+
+    req.flash("thanhcong", "Xóa nhân viên thành công!");
+    res.redirect("/employees");
+  } catch (error) {
+    console.log(error);
+    req.flash("thatbai", "Có lỗi xảy ra khi xóa nhân viên!");
+    res.redirect("/employees");
+  }
+};
