@@ -14,42 +14,46 @@
       <div class="card mb-3">
         <div class="card-header">Bộ lọc và tìm kiếm</div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-6">
-              <button
-                class="btn btn-sm ml-1 btn-outline-primary active"
-                button-status=""
-              >
-                Tất cả</button
-              ><button
-                class="btn btn-sm ml-1 btn-outline-primary"
-                button-status="active"
-              >
-                Hoạt động</button
-              ><button
-                class="btn btn-sm ml-1 btn-outline-primary"
-                button-status="inactive"
-              >
-                Dừng hoạt động
-              </button>
+          <form id="filter-form" action="/employees" method="GET">
+            <div class="form-row">
+              <div class="form-group col-md-2">
+                <label for="EmployeeID">Mã NV</label>
+                <input type="text" class="form-control" id="EmployeeID" name="EmployeeID"
+                       value="<%= query?.EmployeeID || '' %>" placeholder="Nhập ID">
+              </div>
+      
+              <div class="form-group col-md-3">
+                <label for="FullName">Họ tên</label>
+                <input type="text" class="form-control" id="FullName" name="FullName"
+                       value="<%= query?.FullName || '' %>" placeholder="Nhập tên">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="DepartmentID">Phòng ban</label>
+                <select class="form-control" id="DepartmentID" name="DepartmentID">
+                  <option value="">Tất cả</option>
+                  <% departments.forEach(dept => { %>
+                    <option value="<%= dept.DepartmentID %>" <%= query?.DepartmentID == dept.DepartmentID ? 'selected' : '' %>>
+                      <%= dept.DepartmentName %>
+                    </option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="PositionID">Chức vụ</label>
+                <select class="form-control" id="PositionID" name="PositionID">
+                  <option value="">Tất cả</option>
+                  <% positions.forEach(pos => { %>
+                    <option value="<%= pos.PositionID %>" <%= query?.PositionID == pos.PositionID ? 'selected' : '' %>>
+                      <%= pos.PositionName %>
+                    </option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Tìm</button>
+              </div>
             </div>
-            <div class="col-6">
-              <form id="form-search">
-                <div class="input-group">
-                  <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Nhập từ khóa"
-                    name="keyword"
-                    value=""
-                  />
-                  <div class="input-group-appent">
-                    <button class="btn btn-primary" type="submit">Tìm</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
 

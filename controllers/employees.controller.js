@@ -6,17 +6,58 @@ const { where } = require("sequelize");
 // [GET] /employees
 module.exports.index = async (req, res) => {
   try {
-    const employees = await dbHuman.Employee.findAll();
+    const { EmployeeID, FullName, DepartmentID, PositionID } = req.query;
+
+    const searchConditions = {};
+    
+    if (EmployeeID) {
+      searchConditions.EmployeeID = EmployeeID;
+    }
+
+    if (FullName) {
+      searchConditions.FullName = {
+        [dbHuman.Sequelize.Op.like]: `%${FullName}%`,
+      };
+    }
+    if (DepartmentID) {
+      searchConditions.DepartmentID = DepartmentID;
+    }
+
+    if (PositionID) {
+      searchConditions.PositionID = PositionID;
+    }
+
+    const employees = await dbHuman.Employee.findAll({
+      where: searchConditions,
+      include: [
+        {
+          model: dbHuman.Department,
+          required: false,
+        },
+        {
+          model: dbHuman.Position,
+          required: false,
+        },
+      ],
+    });
+
     const cleanEmployees = employees.map((employee) => employee.dataValues);
+
+    const departments = await dbHuman.Department.findAll();
+    const positions = await dbHuman.Position.findAll();
 
     res.render("pages/employees/index.ejs", {
       pageTitle: "Quản lý nhân viên",
       cleanEmployees,
+      departments,  
+      positions,   
+      query: req.query,
     });
   } catch (error) {
     console.log(error);
   }
 };
+
 
 // [GET] /employees/create
 module.exports.createEmployees = async (req, res) => {
