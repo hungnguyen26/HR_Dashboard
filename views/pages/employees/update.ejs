@@ -1,0 +1,130 @@
+<div class="mt-5">
+    <div class="row">
+      <div class="col-12 mx-auto">
+        <div class="d-flex justify-content-between">
+          <h4>Cập nhật nhân viên : <b><%= employee.FullName %></b></h4>
+          <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
+        </div>
+  
+        <hr />
+  
+        <form
+          action="/employees/edit/<%= employee.EmployeeID %>"
+          method="POST"
+          style="width: 60%; margin: 0 auto"
+        >
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="FullName">Họ tên</label>
+              <input
+                type="text"
+                class="form-control"
+                id="FullName"
+                name="FullName"
+                value="<%= employee.FullName %>"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="DateOfBirth">Ngày sinh</label>
+              <input
+                type="date"
+                class="form-control"
+                id="DateOfBirth"
+                name="DateOfBirth"
+                value="<%= employee.DateOfBirth %>"
+                required
+              />
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="Email">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="Email"
+              name="Email"
+              value="<%= employee.Email %>"
+              required
+            />
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="PhoneNumber">SĐT</label>
+              <input
+                type="text"
+                class="form-control"
+                id="PhoneNumber"
+                name="PhoneNumber"
+                value="<%= employee.PhoneNumber %>"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="Gender">Giới tính</label>
+              <select class="form-control" id="Gender" name="Gender" required>
+                <option value="">Chọn giới tính</option>
+                <option value="Nam" <%= employee.Gender === "Nam" ? "selected" : "" %>>Nam</option>
+                <option value="Nữ" <%= employee.Gender === "Nữ" ? "selected" : "" %>>Nữ</option>
+                <option value="Khác" <%= employee.Gender === "Khác" ? "selected" : "" %>>Khác</option>
+              </select>
+            </div>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="HireDate">Ngày vào công ty</label>
+              <input
+                type="date"
+                class="form-control"
+                id="HireDate"
+                name="HireDate"
+                value="<%= employee.HireDate %>"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="DepartmentID">Phòng ban</label>
+              <select class="form-control" id="DepartmentID" name="DepartmentID" required>
+                <option value="">Chọn phòng ban</option>
+                <% departments.forEach(dept => { %>
+                  <option value="<%= dept.DepartmentID %>" <%= dept.DepartmentID === employee.DepartmentID ? "selected" : "" %>>
+                    <%= dept.DepartmentName %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+          </div>
+  
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="PositionID">Chức vụ</label>
+              <select class="form-control" id="PositionID" name="PositionID" required>
+                <option value="">Chọn chức vụ</option>
+                <% positions.forEach(pos => { %>
+                  <option value="<%= pos.PositionID %>" <%= pos.PositionID === employee.PositionID ? "selected" : "" %>>
+                    <%= pos.PositionName %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="Status">Trạng thái</label>
+              <select class="form-control" id="Status" name="Status" required>
+                <option value="">Chọn trạng thái</option>
+                <option value="Đang làm việc" <%= employee.Status === "Đang làm việc" ? "selected" : "" %>>Đang làm việc</option>
+                <option value="Nghỉ việc" <%= employee.Status === "Nghỉ việc" ? "selected" : "" %>>Nghỉ việc</option>
+              </select>
+            </div>
+          </div>
+  
+          <button type="submit" class="btn btn-primary mt-3">
+            Cập nhật nhân viên
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  

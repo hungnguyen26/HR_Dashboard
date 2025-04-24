@@ -56,7 +56,7 @@ module.exports.createEmployeesPost = async (req, res) => {
 
     if (existEmployee) {
       req.flash("thatbai", "Email hoặc SĐT đã tồn tại!");
-      res.redirect("back");
+      return res.redirect("back");
     }
 
     const newEmployee = await dbHuman.Employee.create({
@@ -89,3 +89,108 @@ module.exports.createEmployeesPost = async (req, res) => {
     res.redirect("/employees/create");
   }
 };
+
+// [GET] /employees/edit/{id}
+module.exports.updateEmployees = async (req, res) => {
+  const employeeId = req.params.id;
+  
+  try {
+    const employee = await dbHuman.Employee.findOne({
+      where: {
+        EmployeeID: employeeId
+      }
+    })
+
+    if (!employee) {
+      req.flash("thatbai", "Không tìm thấy nhân viên!");
+      return res.redirect("/employees");
+    }
+
+    const departments = await dbHuman.Department.findAll();
+    const positions = await dbHuman.Position.findAll();
+
+    res.render("pages/employees/update.ejs", {
+      pageTitle: "Cập nhật nhân viên",
+      employee: employee.dataValues,
+      departments,
+      positions
+    });
+
+  } catch (error) {
+    console.log(error);
+    req.flash("thatbai", "Cập nhật nhân viên thất bại!");
+    res.redirect("/employees");
+  }
+  
+};
+
+
+// [POST] /employees/edit/{id}
+module.exports.updateEmployeesPost = async (req, res) => {
+  const employeeId = req.params.id;
+
+  try {
+    const {
+      FullName,
+      DateOfBirth,
+      Email,
+      PhoneNumber,
+      Gender,
+      HireDate,
+      DepartmentID,
+      PositionID,
+      Status,
+    } = req.body;
+
+    const existEmployee = await dbHuman.Employee.findOne({
+      where: {
+        [dbHuman.Sequelize.Op.or]: [
+          { Email: Email },
+          { PhoneNumber: PhoneNumber },
+        ],
+        EmployeeID: {
+          [dbHuman.Sequelize.Op.ne]: employeeId
+        }
+      },
+    });
+
+    if (existEmployee) {
+      req.flash("thatbai", "Email hoặc SĐT đã tồn tại!");
+      return res.redirect("back");
+    }
+
+    await dbHuman.Employee.update(
+      {
+        FullName,
+        DateOfBirth,
+        Email,
+        PhoneNumber,
+        Gender,
+        HireDate,
+        DepartmentID,
+        PositionID,
+        Status,
+        UpdatedAt: dbHuman.Sequelize.literal("GETDATE()"),
+      },
+      { where: { EmployeeID: employeeId } }
+    );
+
+    await dbPayroll.Employee.update(
+      {
+        FullName,
+        DepartmentID,
+        PositionID,
+        Status,
+      },
+      { where: { EmployeeID: employeeId } }
+    );
+
+    req.flash("thanhcong", "Cập nhật nhân viên thành công!");
+    res.redirect("/employees");
+  } catch (error) {
+    console.log(error);
+    req.flash("thatbai", "Cập nhật nhân viên thất bại!");
+    res.redirect("/employees");
+  }
+};
+

@@ -9,4 +9,9 @@ router.get('/create', controller.createEmployees);
 
 router.post('/create', controller.createEmployeesPost);
 
+router.get('/edit/:id', controller.updateEmployees);
+
+router.post('/edit/:id', controller.updateEmployeesPost);
+
+
 module.exports = router;
