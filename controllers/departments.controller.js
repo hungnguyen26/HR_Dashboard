@@ -114,7 +114,7 @@ module.exports.updateDepartmentPatch = async (req, res) => {
     res.redirect("/departments");
   } catch (error) {
     console.log(error);
-    res.redirect("/departments/create");
+    res.redirect("/departments");
   }
 };
 
