@@ -4,6 +4,7 @@
         <div class="d-flex justify-content-between">
           <h4>Quản Lý Phòng Ban</h4>
           <a href="/departments/create" class="btn btn-primary">Thêm Phòng Ban</a>
+          <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
         </div>
   
         <hr />
@@ -28,8 +29,23 @@
 
 
                 <td>
-                  <a href="/departments/edit/<%= department.DepartmentID %>" class="btn btn-warning mx-2">Cập nhật</a>
-                  <a href="/departments/delete/<%= department.DepartmentID %>" class="btn btn-danger">Xóa</a>
+                  <div class="d-flex align-items-center">
+                    <a href="/departments/edit/<%= department.DepartmentID %>" class="btn btn-warning btn-sm mx-2 d-flex align-items-center justify-content-center">
+                      <i class="fa-solid fa-pen-to-square me-1"></i> Cập nhật
+                    </a>
+                  
+                    <form 
+                      action="/departments/delete/<%= department.DepartmentID %>?_method=DELETE" 
+                      method="POST" 
+                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa phòng ban không?')"
+                      class="m-0 p-0 d-inline"
+                    >
+                      <button type="submit" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center" title="Xóa">
+                        <i class="fa-regular fa-trash-can me-1"></i> Xóa
+                      </button>
+                    </form>
+                  </div>
+                  
                 </td>
               </tr>
             <% }); %>

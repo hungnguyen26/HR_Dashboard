@@ -1,7 +1,6 @@
 const dbHuman = require("../model/human/index.model");
 const dbPayroll = require("../model/payroll/index.model");
 const searchHelper = require("../helpers/search");
-const { where } = require("sequelize");
 
 // [GET] /employees
 module.exports.index = async (req, res) => {
