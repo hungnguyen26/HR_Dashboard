@@ -3,21 +3,14 @@
       <div class="col-12 mx-auto">
         <div class="d-flex justify-content-between">
           <h2>Thêm chức vụ</h2>
+          <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
         </div>
   
         <hr />
         <form action="/jobs/create" method="POST" style="width: 40%; margin: 0 auto;">
           <div class="form-group">
-            <label for="jobtitle">Tên chức vụ</label>
-            <input type="text" class="form-control" id="jobtitle" name="jobname" placeholder="Nhập tên chức vụ" required>
-          </div>
-          <div class="form-group">
-            <label for="minsalary">Lương tối thiểu</label>
-            <input type="number" class="form-control" id="minsalary" name="minsalary" placeholder="Nhập lương tối thiểu" required>
-          </div>
-          <div class="form-group">
-            <label for="maxsalary">Lương tối đa</label>
-            <input type="number" class="form-control" id="maxsalary" name="maxsalary" placeholder="Nhập lương tối đa" required>
+            <label for="positionName">Tên chức vụ</label>
+            <input type="text" class="form-control" id="positionName" name="positionName" placeholder="Nhập tên chức vụ" required>
           </div>
           <button type="submit" class="btn btn-primary">Thêm</button>
         </form>

@@ -1,47 +1,54 @@
 <div class="mt-5">
-    <div class="row">
-      <div class="col-12 mx-auto">
-        <div class="d-flex justify-content-between">
-          <h4>Quản Lý Chức Vụ</h4>
-          <a href="/jobs/create" class="btn btn-primary">Thêm Chức Vụ</a>
-        </div>
-  
-        <hr />
-  
-        <table class="table table-bordered table-hover">
-          <thead>
+  <div class="row">
+    <div class="col-12 mx-auto">
+      <div class="d-flex justify-content-between">
+        <h4>Quản Lý Chức Vụ</h4>
+        <a href="/jobs/create" class="btn btn-primary">Thêm Chức Vụ</a>
+        <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
+      </div>
+
+      <hr />
+
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Tên Chức Vụ</th>
+            <th scope="col">Ngày tạo</th>
+            <th scope="col">Ngày cập nhật</th>
+            <th scope="col">Hoạt động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% cleanPositions.forEach((position) => { %>
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Tên Chức Vụ</th>
-              <th scope="col">Lương Tối Thiểu</th>
-              <th scope="col">Lương Tối Đa</th>
-              <th scope="col">Hoạt động</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Kế toán trưởng</td>
-              <td>15,000,000 đ</td>
-              <td>25,500,000 đ</td>
-              <td >
-                <a href="" class="btn btn-warning mx-2">Cập nhật</a>
-                <a href="" class="btn btn-danger">Xóa</a>
+              <th scope="row"><%= position.PositionID %></th>
+              <td><%= position.PositionName %></td>
+              <td><%= moment(position.CreatedAt).format('DD/MM/YYYY HH:mm:ss') %></td>
+              <td><%= moment(position.UpdatedAt).format('DD/MM/YYYY HH:mm:ss') %></td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <a href="/jobs/edit/<%= position.PositionID %>" class="btn btn-warning btn-sm mx-2 d-flex align-items-center justify-content-center">
+                     Cập nhật
+                  </a>
+                
+                  <form 
+                    action="/jobs/delete/<%= position.PositionID %>?_method=DELETE"
+                    method="POST" 
+                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa chức vụ không?')"
+                    class="m-0 p-0 d-inline"
+                  >
+                    <button type="submit" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center" title="Xóa">
+                       Xóa
+                    </button>
+                  </form>
+                </div>
+                
               </td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Kỹ sư phần mềm</td>
-                <td>12,000,000 đ</td>
-                <td>35,500,000 đ</td>
-                <td >
-                  <a href="" class="btn btn-warning mx-2">Cập nhật</a>
-                  <a href="" class="btn btn-danger">Xóa</a>
-                </td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
+          <% }); %>
+        </tbody>
+      </table>
     </div>
   </div>
-  
+</div>
