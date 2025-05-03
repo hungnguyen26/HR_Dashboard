@@ -9,4 +9,6 @@ router.get('/create', controller.createAttendance);
 
 router.post('/create', controller.createAttendancePost);
 
+router.delete('/delete/:id', controller.deleteAttendance);
+
 module.exports = router;

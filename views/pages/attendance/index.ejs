@@ -65,8 +65,19 @@
                 </td>
                 <td><%= record.CreatedAt.toLocaleString('vi-VN') %></td>
                 <td>
-                  <a href="/attendance/edit/<%= record.AttendanceID %>" class="btn btn-warning btn-sm">Sửa</a>
-                  <a href="/attendance/delete/<%= record.AttendanceID %>" onclick="return confirm('Xác nhận xóa?')" class="btn btn-danger btn-sm">Xóa</a>
+                  <div class="d-flex align-items-center">
+                    <a href="/attendance/edit/<%= record.AttendanceID %>" class="btn btn-warning btn-sm mx-2 d-flex align-items-center justify-content-center">Sửa</a>
+                    <form 
+                        action="/attendance/delete/<%= record.AttendanceID %>?_method=DELETE" 
+                        method="POST" 
+                        onsubmit="return confirm('Xác nhận xóa?')"
+                        class="m-0 p-0 d-inline"
+                      >
+                        <button type="submit" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center" title="Xóa">
+                          Xóa
+                        </button>
+                      </form>
+                  </div>
                 </td>
               </tr>
             <% }) %>

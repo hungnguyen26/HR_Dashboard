@@ -67,4 +67,27 @@ module.exports.createAttendancePost = async (req, res) => {
     res.redirect("/attendance/create");
   }
 };
+
+// [DELETE] /attendance/delete/:id
+module.exports.deleteAttendance = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const deleted = await dbPayroll.Attendance.destroy({
+      where: { AttendanceID: id }
+    });
+
+    if (deleted) {
+      req.flash("thanhcong", "Xóa chấm công thành công.");
+    } else {
+      req.flash("thatbai", "Không tìm thấy bản ghi để xóa.");
+    }
+
+    res.redirect("/attendance");
+  } catch (error) {
+    console.error(error);
+    req.flash("thatbai", "Đã xảy ra lỗi khi xóa chấm công.");
+    res.redirect("/attendance");
+  }
+  };
   
