@@ -1,0 +1,87 @@
+<div class="mt-5">
+    <div class="row">
+      <div class="col-12 mx-auto">
+        <div class="d-flex justify-content-between">
+          <h4>Quản Lý Chấm Công</h4>
+          <a href="/attendance/create" class="btn btn-primary">Thêm Chấm Công</a>
+          <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
+        </div>
+  
+        <hr />
+        <div class="card mb-3">
+            <div class="card-header">Bộ lọc chấm công</div>
+            <div class="card-body">
+              <form id="filter-form" action="/attendance" method="GET">
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label for="EmployeeID" class="form-label">Mã NV</label>
+                    <input type="text" class="form-control" id="EmployeeID" name="EmployeeID" placeholder="Nhập ID">
+                  </div>
+          
+                  <div class="col-md-5">
+                    <label for="FullName" class="form-label">Họ tên</label>
+                    <input type="text" class="form-control" id="FullName" name="FullName" placeholder="Nhập tên nhân viên">
+                  </div>
+          
+                  <div class="col-md-2">
+                    <label for="AttendanceMonth" class="form-label">Tháng chấm công</label>
+                    <input type="month" class="form-control" id="AttendanceMonth" name="AttendanceMonth">
+                  </div>
+          
+                  <div class="col-md-1 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Mã NV</th>
+              <th scope="col">Họ Tên</th>
+              <th scope="col">Số ngày làm</th>
+              <th scope="col">Số ngày vắng</th>
+              <th scope="col">Số ngày nghỉ phép</th>
+              <th scope="col">Tháng chấm công</th>
+              <th scope="col">Ngày tạo</th>
+              <th scope="col">Hoạt động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td>1</td>
+                <td>NV001</td>
+                <td>Nguyễn Văn A</td>
+                <td>22</td>
+                <td>1</td>
+                <td>2</td>
+                <td>2025-04</td>
+                <td>2025-04-01 08:15:00</td>
+                <td>
+                  <a href="/attendance/edit/1" class="btn btn-sm btn-warning">Sửa</a>
+                  <a href="/attendance/delete/1" class="btn btn-sm btn-danger" onclick="return confirm('Xác nhận xóa?')">Xóa</a>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>NV002</td>
+                <td>Trần Thị B</td>
+                <td>20</td>
+                <td>3</td>
+                <td>1</td>
+                <td>2025-04</td>
+                <td>2025-04-02 09:00:00</td>
+                <td>
+                  <a href="/attendance/edit/2" class="btn btn-sm btn-warning">Sửa</a>
+                  <a href="/attendance/delete/2" class="btn btn-sm btn-danger" onclick="return confirm('Xác nhận xóa?')">Xóa</a>
+                </td>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  

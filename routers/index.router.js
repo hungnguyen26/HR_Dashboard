@@ -4,6 +4,7 @@ const payrollRouter = require("./payroll.router");
 const reportRouter = require("./reports.router");
 const departmentRouter = require("./departments.router");
 const jobRouter = require("./jobs.router");
+const attendanceRouter = require("./attendance.router");
 
 module.exports = (app) => {
   app.use("/", homeRouter);
@@ -19,5 +20,7 @@ module.exports = (app) => {
   app.use("/departments", departmentRouter);
 
   app.use("/jobs", jobRouter);
+
+  app.use("/attendance", attendanceRouter);
 
 };
