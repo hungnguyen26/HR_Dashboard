@@ -1,0 +1,40 @@
+<div class="mt-5">
+    <div class="row">
+      <div class="col-12 mx-auto">
+        <div class="d-flex justify-content-between">
+          <h4>Cập nhật chấm công ID = <%= attendance.AttendanceID %></h4>
+          <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
+        </div>
+        <hr />
+        <form action="/attendance/edit/<%= attendance.AttendanceID %>?_method=PATCH" method="POST" style="width: 40%; margin: 0 auto;"  >
+          <div class="form-group">
+            <label for="EmployeeID" class="form-label">Mã nhân viên</label>
+            <input type="text" class="form-control" id="EmployeeID" name="EmployeeID" value="<%= attendance.EmployeeID %>" readonly>
+          </div>
+      
+          <div class="form-group">
+            <label for="WorkDays" class="form-label">Số ngày đi làm</label>
+            <input type="number" class="form-control" id="WorkDays" name="WorkDays" value="<%= attendance.WorkDays %>" required>
+          </div>
+      
+          <div class="form-group">
+            <label for="AbsentDays" class="form-label">Số ngày vắng</label>
+            <input type="number" class="form-control" id="AbsentDays" name="AbsentDays" value="<%= attendance.AbsentDays %>" required>
+          </div>
+      
+          <div class="form-group">
+            <label for="LeaveDays" class="form-label">Số ngày nghỉ phép</label>
+            <input type="number" class="form-control" id="LeaveDays" name="LeaveDays" value="<%= attendance.LeaveDays %>" required>
+          </div>
+      
+          <div class="form-group">
+            <label for="AttendanceMonth" class="form-label">Tháng chấm công</label>
+            <input type="month" class="form-control" id="AttendanceMonth" name="AttendanceMonth" value="<%= new Date(attendance.AttendanceMonth).getFullYear() + '-' + (new Date(attendance.AttendanceMonth).getMonth() + 1).toString().padStart(2, '0') %>" required>
+          </div>
+      
+          <button type="submit" class="btn btn-primary">Cập nhật</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  

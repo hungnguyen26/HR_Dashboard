@@ -68,6 +68,59 @@ module.exports.createAttendancePost = async (req, res) => {
   }
 };
 
+// [GET] /attendance/edit/{id}
+module.exports.updateAttendance = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const attendance = await dbPayroll.Attendance.findByPk(id);
+    if (!attendance) {
+      req.flash("error", "Không tìm thấy bản ghi.");
+      return res.redirect("/attendance");
+    }
+
+    res.render("pages/attendance/update", {
+      pageTitle: "Cập nhật chấm công",
+      attendance
+    });
+  } catch (error) {
+    console.error(error);
+    req.flash("error", "Lỗi khi tải dữ liệu.");
+    res.redirect("/attendance");
+  }
+};
+
+// [PATCH] /attendance/edit/{id}
+module.exports.updateAttendancePatch = async (req, res) => {
+  const id = req.params.id;
+  const {
+    WorkDays,
+    AbsentDays,
+    LeaveDays,
+    AttendanceMonth
+  } = req.body;
+  try {
+    const attendance = await dbPayroll.Attendance.findByPk(id);
+    if (!attendance) {
+      req.flash("thatbai", "Không tìm thấy bản ghi chấm công");
+      return res.redirect("/attendance");
+    }
+
+    await attendance.update({
+      WorkDays,
+      AbsentDays,
+      LeaveDays,
+      AttendanceMonth
+    });
+
+    req.flash("thanhcong", "Cập nhật chấm công thành công!");
+    res.redirect("/attendance");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/attendance");
+  }
+};
+
 // [DELETE] /attendance/delete/:id
 module.exports.deleteAttendance = async (req, res) => {
   const id = req.params.id;
