@@ -52,34 +52,26 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-                <td>1</td>
-                <td>NV001</td>
-                <td>Nguyễn Văn A</td>
-                <td>22</td>
-                <td>1</td>
-                <td>2</td>
-                <td>2025-04</td>
-                <td>2025-04-01 08:15:00</td>
+            <% attendances.forEach(record => { %>
+              <tr>
+                <td><%= record.AttendanceID %></td>
+                <td><%= record.EmployeeID %></td>
+                <td><%= record.Employee?.FullName || '' %></td>
+                <td><%= record.WorkDays %></td>
+                <td><%= record.AbsentDays %></td>
+                <td><%= record.LeaveDays %></td>
                 <td>
-                  <a href="/attendance/edit/1" class="btn btn-sm btn-warning">Sửa</a>
-                  <a href="/attendance/delete/1" class="btn btn-sm btn-danger" onclick="return confirm('Xác nhận xóa?')">Xóa</a>
+                  <%= new Date(record.AttendanceMonth).getFullYear() + '-' + (new Date(record.AttendanceMonth).getMonth() + 1).toString().padStart(2, '0') %>
+                </td>
+                <td><%= record.CreatedAt.toLocaleString('vi-VN') %></td>
+                <td>
+                  <a href="/attendance/edit/<%= record.AttendanceID %>" class="btn btn-warning btn-sm">Sửa</a>
+                  <a href="/attendance/delete/<%= record.AttendanceID %>" onclick="return confirm('Xác nhận xóa?')" class="btn btn-danger btn-sm">Xóa</a>
                 </td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>NV002</td>
-                <td>Trần Thị B</td>
-                <td>20</td>
-                <td>3</td>
-                <td>1</td>
-                <td>2025-04</td>
-                <td>2025-04-02 09:00:00</td>
-                <td>
-                  <a href="/attendance/edit/2" class="btn btn-sm btn-warning">Sửa</a>
-                  <a href="/attendance/delete/2" class="btn btn-sm btn-danger" onclick="return confirm('Xác nhận xóa?')">Xóa</a>
-                </td>
+            <% }) %>
           </tbody>
+          
         </table>
       </div>
     </div>
