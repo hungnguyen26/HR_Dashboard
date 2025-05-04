@@ -3,22 +3,71 @@ const dbHuman = require("../model/human/index.model");
 
 // [GET] /attendance
 module.exports.index = async (req, res) => {
-    try {
-      const attendances = await dbPayroll.Attendance.findAll({
-        include: {
-          model: dbHuman.Employee,
-          attributes: ['EmployeeID', 'FullName']
-        }
-      });
-      res.render("pages/attendance/index.ejs", {
-        pageTitle: "Quản lý chấm công",
-        attendances
-      });
-    } catch (error) {
-      console.log(error);
+  try {
+    const { EmployeeID, FullName, AttendanceMonth, page = 1 } = req.query;
+
+    const limit = 5;
+    const offset = (page - 1) * limit;
+
+    const Sequelize = dbPayroll.Sequelize;
+    const { Op } = Sequelize;
+
+    const whereClause = {};
+
+    if (EmployeeID) {
+      whereClause.EmployeeID = EmployeeID;
     }
+
+    if (AttendanceMonth) {
+      whereClause.AttendanceMonth = AttendanceMonth;
+    }
+
+    const includeClause = {
+      model: dbHuman.Employee,
+      attributes: ['EmployeeID', 'FullName'],
+      required: true,
+      where: {},
+    };
+
+    if (FullName) {
+      includeClause.where.FullName = {
+        [Op.like]: `%${FullName}%`,
+      };
+    }
+
+    const totalCount = await dbPayroll.Attendance.count({
+      where: whereClause,
+      include: includeClause.where.FullName ? [includeClause] : undefined,
+    });
+
+    const attendances = await dbPayroll.Attendance.findAll({
+      where: whereClause,
+      include: includeClause,
+      order: [['AttendanceMonth', 'DESC']],
+      limit,
+      offset,
+    });
+
+    const totalPage = Math.ceil(totalCount / limit);
+
+    res.render("pages/attendance/index.ejs", {
+      pageTitle: "Quản lý chấm công",
+      attendances,
+      query: req.query,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPage,
+      },
+    });
+
+  } catch (error) {
+    console.log(error);
+    req.flash("thatbai", "Có lỗi xảy ra.");
+    return res.redirect("back");
+  }
 };
-  
+
+
 // [GET] /attendance/create
 module.exports.createAttendance = async (req, res) => {
   try {

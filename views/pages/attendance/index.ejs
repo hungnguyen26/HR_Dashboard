@@ -15,17 +15,20 @@
                 <div class="row g-3">
                   <div class="col-md-4">
                     <label for="EmployeeID" class="form-label">Mã NV</label>
-                    <input type="text" class="form-control" id="EmployeeID" name="EmployeeID" placeholder="Nhập ID">
+                    <input type="text" class="form-control" id="EmployeeID" name="EmployeeID" 
+                    value="<%= query?.EmployeeID || '' %>" placeholder="Nhập ID">
                   </div>
           
                   <div class="col-md-5">
-                    <label for="FullName" class="form-label">Họ tên</label>
-                    <input type="text" class="form-control" id="FullName" name="FullName" placeholder="Nhập tên nhân viên">
+                    <label for="FullName">Họ tên</label>
+                    <input type="text" class="form-control" id="FullName" name="FullName"
+                       value="<%= query?.FullName || '' %>" placeholder="Nhập tên">
                   </div>
           
                   <div class="col-md-2">
                     <label for="AttendanceMonth" class="form-label">Tháng chấm công</label>
-                    <input type="month" class="form-control" id="AttendanceMonth" name="AttendanceMonth">
+                    <input type="month" class="form-control" id="AttendanceMonth" name="AttendanceMonth"
+                    value="<%= query?.AttendanceMonth || '' %>">
                   </div>
           
                   <div class="col-md-1 d-flex align-items-end">
@@ -36,6 +39,7 @@
             </div>
           </div>
           
+        <hr />
           
         <table class="table table-bordered table-hover">
           <thead>
@@ -84,6 +88,33 @@
           </tbody>
           
         </table>
+        <nav>
+          <ul class="pagination justify-content-center">
+            <% if (pagination.currentPage > 1) { %>
+              <li class="page-item">
+                <button class="page-link" button-pagination="1">Trang đầu</button>
+              </li>
+              <li class="page-item">
+                <button class="page-link" button-pagination="<%= pagination.currentPage - 1 %>">Trang trước</button>
+              </li>
+            <% } %>
+        
+            <% for (var i = 1; i <= pagination.totalPage; i++) { %>
+              <li class="page-item <%= pagination.currentPage == i ? 'active' : '' %>">
+                <button class="page-link" button-pagination="<%= i %>"><%= i %></button>
+              </li>
+            <% } %>
+        
+            <% if (pagination.currentPage < pagination.totalPage) { %>
+              <li class="page-item">
+                <button class="page-link" button-pagination="<%= pagination.currentPage + 1 %>">Kế tiếp</button>
+              </li>
+              <li class="page-item">
+                <button class="page-link" button-pagination="<%= pagination.totalPage %>">Trang cuối</button>
+              </li>
+            <% } %>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>
