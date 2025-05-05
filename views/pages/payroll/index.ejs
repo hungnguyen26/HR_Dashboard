@@ -31,13 +31,17 @@
                 <label for="DepartmentID">Phòng ban</label>
                 <select class="form-control" id="DepartmentID" name="DepartmentID">
                   <option value="">Tất cả</option>
-
+                  <% departments.forEach(dept => { %>
+                    <option value="<%= dept.DepartmentID %>" >
+                      <%= dept.DepartmentName %>
+                    </option>
+                  <% }) %>
                 </select>
               </div>
       
               <div class="col-md-3">
-                <label for="AttendanceMonth" class="form-label">Tháng chấm công</label>
-                <input type="month" class="form-control" id="AttendanceMonth" name="AttendanceMonth" value="">
+                <label for="SalaryMonth" class="form-label">Tháng chấm công</label>
+                <input type="month" class="form-control" id="SalaryMonth" name="SalaryMonth" value="">
               </div>
       
               <div class="col-md-1 d-flex align-items-end">
@@ -68,9 +72,27 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Dữ liệu lịch sử lương sẽ được động hiển thị ở đây -->
+          <% salaries.forEach(salary => { %>
+            <tr>
+              <td><%= salary.SalaryID %></td>
+              <td><%= salary.Employee?.EmployeeID %></td>
+              <td><%= salary.Employee?.FullName %></td>
+              <td><%= new Date(salary.SalaryMonth).getFullYear() + '-' + (new Date(salary.SalaryMonth).getMonth() + 1).toString().padStart(2, '0') %></td>
+              <td><%= salary.BaseSalary.toLocaleString() %> đ</td>
+              <td><%= salary.Bonus.toLocaleString() %> đ</td>
+              <td><%= salary.Deductions.toLocaleString() %> đ</td>
+              <td><%= salary.NetSalary.toLocaleString() %> đ</td>
+              <td><%= salary.CreatedAt.toLocaleString('vi-VN') %></td>
+              <td>
+                <a href="/payroll/edit/<%= salary.SalaryID %>" class="btn btn-sm btn-warning">Sửa</a>
+                <a href="/payroll/delete/<%= salary.SalaryID %>" class="btn btn-sm btn-danger">Xóa</a>
+              </td>
+            </tr>
+          <% }) %>
         </tbody>
       </table>
+      <%- include('../../partials/pagination', { pagination: pagination }) %>
+
     </div>
   </div>
 </div>

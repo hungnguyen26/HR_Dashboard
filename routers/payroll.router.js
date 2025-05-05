@@ -7,4 +7,6 @@ router.get('/', controller.index);
 
 router.get('/create', controller.createPayroll);
 
+router.post('/create', controller.createPayrollPost);
+
 module.exports = router;

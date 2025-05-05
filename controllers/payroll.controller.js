@@ -1,20 +1,136 @@
 const dbPayroll = require("../model/payroll/index.model");
 const dbHuman = require("../model/human/index.model");
+const { Op } = require("sequelize");
 
 // [GET] /payroll
-module.exports.index = async (req,res)=>{
-    res.render("pages/payroll/index.ejs", {
-        pageTitle: "Quản lý bảng lương"
+module.exports.index = async (req, res) => {
+  try {
+    const {
+      EmployeeID,
+      FullName,
+      DepartmentID,
+      SalaryMonth,
+      page = 1
+    } = req.query;
+
+    const limit = 5;
+    const offset = (parseInt(page) - 1) * limit;
+
+    const whereSalary = {};
+    if (SalaryMonth) whereSalary.SalaryMonth = SalaryMonth;
+
+    // Bước 1: Lấy danh sách Salary
+    const { count, rows: salaryList } = await dbPayroll.Salary.findAndCountAll({
+      where: whereSalary,
+      limit,
+      offset,
+      order: [['CreatedAt', 'DESC']]
     });
-}
+
+    const employeeIDs = salaryList.map(s => s.EmployeeID);
+
+    // Bước 2: Lấy thông tin Employee từ HUMAN_2025
+    const employeeWhere = {
+      EmployeeID: { [Op.in]: employeeIDs }
+    };
+
+    if (EmployeeID) employeeWhere.EmployeeID = EmployeeID;
+    if (FullName) {
+      employeeWhere.FullName = { [Op.like]: `%${FullName}%` };
+    }
+    if (DepartmentID) {
+      employeeWhere.DepartmentID = DepartmentID;
+    }
+
+    const employeeList = await dbHuman.Employee.findAll({
+      where: employeeWhere,
+      include: [{ model: dbHuman.Department }]
+    });
+
+    // Bước 3: Gộp dữ liệu
+    const employeeMap = {};
+    employeeList.forEach(emp => {
+      employeeMap[emp.EmployeeID] = emp;
+    });
+
+    const salaries = salaryList.filter(s => employeeMap[s.EmployeeID]).map(s => {
+      return {
+        ...s.get(),
+        Employee: employeeMap[s.EmployeeID]
+      };
+    });
+
+    // Bước 4: Phòng ban cho bộ lọc
+    const departments = await dbHuman.Department.findAll();
+
+    res.render("pages/payroll/index", {
+      pageTitle: "Quản lý lương nhân viên",
+      salaries,
+      departments,
+      query: req.query,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPage: Math.ceil(count / limit)
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    req.flash("thatbai", "Lỗi khi tải bảng lương");
+    return res.redirect("back");
+  }
+};
+
 
 // [GET] /payroll/create
-module.exports.createPayroll = async (req,res)=>{
-    const employees = await dbHuman.Employee.findAll({
-          order: [['FullName', 'ASC']]
-        })
-    res.render("pages/payroll/create.ejs", {
-        pageTitle: "Tạo mới bảng lương",
-        employees
+module.exports.createPayroll = async (req, res) => {
+  const employees = await dbHuman.Employee.findAll({
+    order: [["FullName", "ASC"]],
+  });
+  res.render("pages/payroll/create.ejs", {
+    pageTitle: "Tạo mới bảng lương",
+    employees,
+  });
+};
+
+// [POST] /payroll/create
+module.exports.createPayrollPost = async (req, res) => {
+  try {
+    const {
+      EmployeeID,
+      SalaryMonth,
+      WorkingDays,
+      BaseSalary,
+      Bonus,
+      Deductions,
+      NetSalary,
+    } = req.body;
+    const existing = await dbPayroll.Salary.findOne({
+        where: {
+          EmployeeID,
+          SalaryMonth
+        }
     });
-}
+
+    if (existing) {
+        req.flash('thatbai', 'Bảng lương cho nhân viên này trong tháng đã tồn tại.');
+        return res.redirect('/payroll/create');
+    }
+    
+    await dbPayroll.Salary.create({
+        EmployeeID,
+        SalaryMonth,
+        WorkingDays,
+        BaseSalary,
+        Bonus: Bonus || 0,
+        Deductions: Deductions || 0,
+        NetSalary
+      });
+  
+    req.flash("thanhcong", "Tạo bảng lương thành công.");
+    res.redirect('/payroll');
+  } catch (error) {
+    console.log(error);
+    req.flash("thatbai", "Thêm nhân viên thất bại!");
+    res.redirect("/payroll/create");
+  }
+};
