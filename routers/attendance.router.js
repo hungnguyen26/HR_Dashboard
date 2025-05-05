@@ -15,4 +15,6 @@ router.patch('/edit/:id', controller.updateAttendancePatch);
 
 router.delete('/delete/:id', controller.deleteAttendance);
 
+router.get('/days', controller.getWorkingDays);
+
 module.exports = router;

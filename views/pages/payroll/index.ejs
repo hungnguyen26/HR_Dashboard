@@ -2,45 +2,69 @@
   <div class="row">
     <div class="col-12 mx-auto">
       <div class="d-flex justify-content-between">
-        <h4>Lịch sử lương của nhân viên</h4>
+        <h4>Quản lý lương nhân viên</h4>
 
-        <!-- Form để lọc -->
-        <form action="/salary/history" method="GET" class="d-flex justify-content-end align-items-center">
-          <label for="employee_id" class="mr-2">Mã Nhân Viên:</label>
-          <input class="mr-3" type="text" id="employee_id" name="employee_id" placeholder="Nhập mã nhân viên">
-          
-          <label for="employee_name" class="mr-2">Tên Nhân Viên:</label>
-          <input class="mr-3" type="text" id="employee_name" name="employee_name" placeholder="Nhập tên nhân viên">
-          
-          <label for="department_id" class="mr-2">Phòng Ban:</label>
-          <select name="department_id" id="department_id" class="mr-3">
-            <option value="">Tất cả</option>
-            <option value="1">Kế Toán</option>
-            <option value="2">Nhân Sự</option>
-            <option value="3">Marketing</option>
-            <!-- Thêm các phòng ban khác nếu có -->
-          </select>
-
-          <label for="month" class="mr-2">Chọn tháng:</label>
-          <input class="mr-3 ml-3" type="month" id="month" name="month" value="2025-03">
-
-          <button type="submit" class="btn btn-primary">Xem lịch sử lương</button>
+        <div>
+          <a href="/payroll/create" class="btn btn-primary">Thêm Bảng Lương</a>
+          <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
+        </div>
         </form>
       </div>
       <hr />
+      <div class="card mb-3">
+        <div class="card-header">Bộ lọc bảng lương</div>
+        <div class="card-body">
+          <form id="filter-form" action="/payroll" method="GET">
+            <div class="row g-3">
+      
+              <div class="col-md-2">
+                <label for="EmployeeID" class="form-label">Mã NV</label>
+                <input type="text" class="form-control" id="EmployeeID" name="EmployeeID" value="" placeholder="Nhập ID">
+              </div>
+      
+              <div class="col-md-3">
+                <label for="FullName">Họ tên</label>
+                <input type="text" class="form-control" id="FullName" name="FullName" value="" placeholder="Nhập tên">
+              </div>
+      
+              <div class="col-md-3">
+                <label for="DepartmentID">Phòng ban</label>
+                <select class="form-control" id="DepartmentID" name="DepartmentID">
+                  <option value="">Tất cả</option>
+
+                </select>
+              </div>
+      
+              <div class="col-md-3">
+                <label for="AttendanceMonth" class="form-label">Tháng chấm công</label>
+                <input type="month" class="form-control" id="AttendanceMonth" name="AttendanceMonth" value="">
+              </div>
+      
+              <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+              </div>
+      
+            </div>
+          </form>
+        </div>
+      </div>
+      
+          
+        <hr />
 
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
             <th scope="col">ID</th>
-            <th scope="col">Mã Nhân Viên</th>
-            <th scope="col">Tên Nhân Viên</th>
+            <th scope="col">Mã NV</th>
+            <th scope="col">Tên NV</th>
             <th scope="col">Tháng Lương</th>
             <th scope="col">Lương cơ bản</th>
             <th scope="col">Thưởng</th>
             <th scope="col">Khấu Trừ</th>
             <th scope="col">Lương Thực Nhận</th>
             <th scope="col">Ngày Tạo</th>
+            <th scope="col">Hoạt động</th>
           </tr>
         </thead>
         <tbody>

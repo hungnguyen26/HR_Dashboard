@@ -1,0 +1,152 @@
+<div class="mt-5">
+  <div class="row">
+    <div class="col-12 mx-auto">
+      <div class="d-flex justify-content-between">
+        <h4>Thêm mới bảng lương</h4>
+        <%- include('../../partials/alert', { messages: messages, time: "5000"
+        }) %>
+      </div>
+
+      <hr />
+
+      <form
+        action="/payroll/create"
+        method="POST"
+        style="width: 40%; margin: 0 auto"
+      >
+        <div class="form-group">
+          <label for="EmployeeID" class="form-label">Nhân viên</label>
+          <select
+            class="form-control"
+            id="EmployeeID"
+            name="EmployeeID"
+            required
+          >
+            <option value="">-- Chọn nhân viên --</option>
+            <% employees.forEach(emp => { %>
+            <option value="<%= emp.EmployeeID %>">
+              <%= emp.EmployeeID %> - <%= emp.FullName %>
+            </option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="SalaryMonth">Tháng lương</label>
+          <input
+            type="month"
+            name="SalaryMonth"
+            id="SalaryMonth"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="form-group d-none" id="working-days-group">
+          <label>Số ngày công:</label>
+          <input
+            type="text"
+            id="WorkingDays"
+            class="form-control"
+            name="WorkingDays"
+            readonly
+          />
+        </div>
+
+        <div id="salary-fields" class="d-none">
+          <div class="form-group">
+            <label for="BaseSalary">Lương cơ bản (VNĐ)</label>
+            <input
+              type="number"
+              name="BaseSalary"
+              id="BaseSalary"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="Bonus">Thưởng (VNĐ)</label>
+            <input
+              type="number"
+              name="Bonus"
+              id="Bonus"
+              class="form-control"
+              value="0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="Deductions">Khấu trừ (VNĐ)</label>
+            <input
+              type="number"
+              name="Deductions"
+              id="Deductions"
+              class="form-control"
+              value="0"
+            />
+          </div>
+
+          <input type="hidden" id="StandardWorkingDays" value="22" />
+
+          <div class="form-group">
+            <label for="NetSalary">Lương thực nhận (VNĐ)</label>
+            <input
+              type="number"
+              name="NetSalary"
+              id="NetSalary"
+              class="form-control"
+              readonly
+              required
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">
+          Lưu bảng lương
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function calculateNetSalary() {
+    const base = parseFloat($("#BaseSalary").val()) || 0;
+    const bonus = parseFloat($("#Bonus").val()) || 0;
+    const deductions = parseFloat($("#Deductions").val()) || 0;
+    const workingDays = parseFloat($("#WorkingDays").val()) || 0;
+    const standardDays = parseFloat($("#StandardWorkingDays").val()) || 22;
+
+    const prorated = (base / standardDays) * workingDays;
+    const net = prorated + bonus - deductions;
+    $("#NetSalary").val(Math.round(net));
+  }
+
+  $("#BaseSalary, #Bonus, #Deductions").on("input", calculateNetSalary);
+
+  function fetchAttendanceDays() {
+    const empId = $("#EmployeeID").val();
+    const month = $("#SalaryMonth").val();
+
+    if (empId && month) {
+      $.ajax({
+        url: `/attendance/days`,
+        method: "GET",
+        data: { EmployeeID: empId, AttendanceMonth: month },
+        success: function (data) {
+          $("#WorkingDays").val(data.days || 0);
+          $("#working-days-group").removeClass("d-none");
+          $("#salary-fields").removeClass("d-none");
+          calculateNetSalary();
+        },
+        error: function () {
+          alert("Không thể lấy số ngày công.");
+          $("#working-days-group").addClass("d-none");
+          $("#salary-fields").addClass("d-none");
+        },
+      });
+    }
+  }
+
+  $("#EmployeeID, #SalaryMonth").on("change", fetchAttendanceDays);
+</script>

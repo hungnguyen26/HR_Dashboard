@@ -3,8 +3,10 @@
       <div class="col-12 mx-auto">
         <div class="d-flex justify-content-between">
           <h4>Quản Lý Phòng Ban</h4>
-          <a href="/departments/create" class="btn btn-primary">Thêm Phòng Ban</a>
-          <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
+          <div>
+            <a href="/departments/create" class="btn btn-primary">Thêm Phòng Ban</a>
+            <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
+          </div>
         </div>
   
         <hr />

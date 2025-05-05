@@ -193,3 +193,29 @@ module.exports.deleteAttendance = async (req, res) => {
   }
   };
   
+
+// [GET] /attendance/days?EmployeeID=&AttendanceMonth=
+module.exports.getWorkingDays = async (req, res) => {
+  try {
+    const { EmployeeID, AttendanceMonth } = req.query;
+
+    if (!EmployeeID || !AttendanceMonth) {
+      return res.status(400).json({ error: "Thiếu thông tin truy vấn." });
+    }
+    const record = await dbPayroll.Attendance.findOne({
+      where: {
+        EmployeeID,
+        AttendanceMonth,
+      },
+    });
+
+    if (!record) {
+      return res.json({ days: 0 });
+    }
+    return res.json({ days: record.WorkDays });
+  } catch (error) {
+    console.error("Lỗi khi lấy số ngày công:", error);
+    return res.status(500).json({ error: "Lỗi máy chủ." });
+  }
+};
+
