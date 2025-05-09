@@ -1,7 +1,16 @@
 const dbPayroll = require("../model/payroll/index.model");
 const dbHuman = require("../model/human/index.model");
+const {Employee} = require("../model/human/index.model");
 const { Op } = require("sequelize");
+const nodemailer = require('nodemailer');
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, 
+    pass: process.env.EMAIL_PASS
+  }
+});
 // [GET] /payroll
 module.exports.index = async (req, res) => {
   try {
@@ -104,33 +113,49 @@ module.exports.createPayrollPost = async (req, res) => {
       Deductions,
       NetSalary,
     } = req.body;
+
     const existing = await dbPayroll.Salary.findOne({
-        where: {
-          EmployeeID,
-          SalaryMonth
-        }
+      where: {
+        EmployeeID,
+        SalaryMonth
+      }
     });
 
     if (existing) {
-        req.flash('thatbai', 'Bảng lương cho nhân viên này trong tháng đã tồn tại.');
-        return res.redirect('/payroll/create');
+      req.flash('thatbai', 'Bảng lương cho nhân viên này trong tháng đã tồn tại.');
+      return res.redirect('/payroll/create');
     }
+
+    const salary = await dbPayroll.Salary.create({
+      EmployeeID,
+      SalaryMonth,
+      WorkingDays,
+      BaseSalary,
+      Bonus: Bonus || 0,
+      Deductions: Deductions || 0,
+      NetSalary
+    });
+
+    const employee = await Employee.findOne({
+      where: { EmployeeID }
+    });
+    console.log(employee.Email);
     
-    await dbPayroll.Salary.create({
-        EmployeeID,
-        SalaryMonth,
-        WorkingDays,
-        BaseSalary,
-        Bonus: Bonus || 0,
-        Deductions: Deductions || 0,
-        NetSalary
-      });
-  
-    req.flash("thanhcong", "Tạo bảng lương thành công.");
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,  
+      to: employee.Email,            
+      subject: `Thông báo bảng lương tháng ${SalaryMonth}`,
+      text: `Chào ${employee.FullName},\n\nBảng lương của bạn cho tháng ${SalaryMonth} đã được tạo thành công.\nMức lương là: ${NetSalary.toLocaleString('vi-VN')} đ.\n\nTrân trọng,\nHR Team`
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    req.flash("thanhcong", "Tạo bảng lương thành công và email đã được gửi.");
     res.redirect('/payroll');
   } catch (error) {
     console.log(error);
-    req.flash("thatbai", "Thêm nhân viên thất bại!");
+    req.flash("thatbai", "Có lỗi xảy ra khi thêm bảng lương!");
     res.redirect("/payroll/create");
   }
 };

@@ -20,11 +20,6 @@ module.exports.requireAuth = async (req, res, next) => {
 
   res.locals.User = user;
   res.locals.Role = user.Roles.map(role => role.RoleName);  
-  
-  console.log("usser : "+ user);
-  console.log("============== ");
-  console.log("role : "+ user.Roles.map(role => role.RoleName));
-  
 
   next();
 };
