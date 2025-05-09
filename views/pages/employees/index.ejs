@@ -84,8 +84,18 @@
                 <td><%= employee.Gender %></td>
                 <td><%= employee.Email %></td>
                 <td><%= employee.PhoneNumber %></td>
-                <td><%= employee.DepartmentName %></td>
-                <td><%= employee.PositionName %></td>
+                <td>
+                  <% 
+                    let department = departments.find(dept => dept.DepartmentID === employee.DepartmentID);
+                  %>
+                  <%= department ? department.DepartmentName : 'Không xác định' %>
+                </td>
+                <td>
+                  <% 
+                    let position = positions.find(pos => pos.PositionID === employee.PositionID);
+                  %>
+                  <%= position ? position.PositionName : 'Không xác định' %>
+                </td>
                 <td><%= employee.Status %></td>
                 <td>
                   <div class="d-flex justify-content-center align-items-center">

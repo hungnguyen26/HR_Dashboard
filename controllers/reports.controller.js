@@ -4,6 +4,14 @@ const { Op } = require("sequelize");
 
 module.exports.index = async (req, res) => {
   try {
+    const employees = await dbHuman.Employee.findAll({
+      include: [
+        { model: dbHuman.Department, attributes: ['DepartmentName'] },
+        { model: dbHuman.Position, attributes: ['PositionName'] }
+      ],
+      raw: true,
+      nest: true,
+    });
     const totalEmployees = await dbHuman.Employee.count();
 
     const employeesByGender = await dbHuman.Employee.findAll({
@@ -52,7 +60,6 @@ module.exports.index = async (req, res) => {
       raw: true,
     });
 
-    // console.log(salaryByMonth);
 
     const departmentDistribution = await dbHuman.Employee.findAll({
       attributes: [
@@ -73,9 +80,10 @@ module.exports.index = async (req, res) => {
 
     res.render("pages/reports/index.ejs", {
       pageTitle: "Báo cáo & Phân tích",
+      cleanEmployees: employees,
+      employeesByDepartment,
       totalEmployees,
       employeesByGender,
-      employeesByDepartment,
       salaryByMonth,
       departmentDistribution,
     });

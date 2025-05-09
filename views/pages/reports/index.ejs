@@ -19,10 +19,11 @@
       </li>
       <li>
         Đang làm việc: 
-        <%= employeesByDepartment.filter(d => d.DepartmentName !== 'Nghỉ việc').reduce((acc, curr) => acc + parseInt(curr.count), 0) %> |
+        <%= cleanEmployees.filter(e => e.Status !== 'Nghỉ việc').length %> |
         Nghỉ việc: 
-        <%= employeesByDepartment.filter(d => d.DepartmentName === 'Nghỉ việc').reduce((acc, curr) => acc + parseInt(curr.count), 0) %>
-      </li>
+        <%= cleanEmployees.filter(e => e.Status === 'Nghỉ việc').length %>
+    </li>
+
     </ul>
   </div>
 
