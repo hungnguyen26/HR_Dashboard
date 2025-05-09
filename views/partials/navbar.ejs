@@ -58,12 +58,14 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Nguyen Huu Hung</span>
-                <img class="img-profile rounded-circle"
-                    src="/img/avt.jpg">
+                <div class="d-inline-block text-gray-600 small">
+                <div><strong><%= User.Username %></strong></div>
+                <div><%= User.Email %></div>
+                </div>
             </a>
-            
         </li>
+
+
 
     </ul>
 

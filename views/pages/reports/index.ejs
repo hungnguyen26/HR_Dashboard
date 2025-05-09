@@ -1,2 +1,42 @@
-<!-- code ở đây -->
-<h1>Báo cáo & Phân tích</h1>
+<% if (Role.includes("Admin")) { %>
+<div class="container mt-5">
+    <h2 class="mb-4"><%= pageTitle %></h2>
+
+    <!-- Tổng quan nhân sự -->
+    <div class="mb-5">
+        <h4>Tổng quan nhân sự</h4>
+        <ul>
+            <li>Tổng số nhân viên: <%= totalEmployees %></li>
+            <li>Nam: <%= employeesByGender.find(gender => gender.Gender === 'Nam')?.count %> | Nữ: <%= employeesByGender.find(gender => gender.Gender === 'Nữ')?.count %></li>
+            <li>Đang làm việc: <%= employeesByDepartment.filter(department => department.DepartmentName !== 'Nghỉ việc').reduce((acc, curr) => acc + curr.count, 0) %> | Nghỉ việc: <%= employeesByDepartment.filter(department => department.DepartmentName === 'Nghỉ việc').reduce((acc, curr) => acc + curr.count, 0) %></li>
+        </ul>
+    </div>
+
+    <!-- Biểu đồ -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h5>Lương theo thời gian</h5>
+            <canvas id="salaryLineChart"></canvas>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <h5>Cổ tức theo tháng</h5>
+            <canvas id="dividendBarChart"></canvas>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <h5>Phân bố nhân sự theo phòng ban</h5>
+            <canvas id="employeePieChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="/js/reportChart.js"></script>
+<% } else { %>
+  <div class="alert alert-danger mt-5 text-center">
+    Bạn không có quyền truy cập trang này.
+  </div>
+<% } %>

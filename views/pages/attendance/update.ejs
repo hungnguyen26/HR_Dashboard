@@ -1,3 +1,4 @@
+<% if (Role.includes("Admin") || Role.includes("Payroll Manager")) { %>
 <div class="mt-5">
     <div class="row">
       <div class="col-12 mx-auto">
@@ -37,4 +38,8 @@
       </div>
     </div>
   </div>
-  
+  <% } else { %>
+  <div class="alert alert-danger mt-5 text-center">
+    Bạn không có quyền truy cập trang này.
+  </div>
+<% } %>

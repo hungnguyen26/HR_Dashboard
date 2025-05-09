@@ -1,0 +1,71 @@
+<% if (Role.includes("Admin")) { %>
+<div class="mt-5">
+  <div class="row">
+    <div class="col-12 mx-auto">
+      <div class="d-flex justify-content-between">
+        <h4>Quản Lý Tài Khoản</h4>
+        <div>
+          <a href="/account/create" class="btn btn-primary">Thêm Tài Khoản</a>
+          <%- include('../../partials/alert', { messages: messages, time: "5000"
+          }) %>
+        </div>
+      </div>
+
+      <hr />
+
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">User ID</th>
+            <th scope="col">Email</th>
+            <th scope="col">Họ Tên</th>
+            <th scope="col">Quyền</th>
+            <th scope="col">Ngày Tạo</th>
+            <th scope="col">Hoạt động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(user => { %>
+          <tr>
+            <td><%= user.UserID %></td>
+            <td><%= user.Email %></td>
+            <td><%= user.Username %></td>
+            <td>
+              <% if (user.Roles && Array.isArray(user.Roles)) { %> <%
+              user.Roles.forEach(role => { %>
+              <span class="badge bg-info"><%= role.RoleName %></span>
+              <% }) %> <% } else { %>
+              <span class="badge bg-secondary">Chưa có quyền</span>
+              <% } %>
+            </td>
+            <td><%= user.CreatedAt.toLocaleString('vi-VN') %></td>
+            <td>
+              <div class="d-flex align-items-center">
+                <a
+                  href="/account/edit/<%= user.UserID %>"
+                  class="btn btn-warning btn-sm mx-2"
+                  >Sửa</a
+                >
+                <form
+                  action="/account/delete/<%= user.UserID %>"
+                  method="POST"
+                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản này không?')"
+                >
+                  <button type="submit" class="btn btn-danger btn-sm">
+                    Xóa
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<% } else { %>
+<div class="alert alert-danger mt-5 text-center">
+  Bạn không có quyền truy cập trang này.
+</div>
+<% } %>

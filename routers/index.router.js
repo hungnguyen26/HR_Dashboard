@@ -6,24 +6,31 @@ const departmentRouter = require("./departments.router");
 const jobRouter = require("./jobs.router");
 const attendanceRouter = require("./attendance.router");
 const authRouter = require("./auth.router");
+const acRouter = require("./account.router");
+const authMiddlewares = require("../middleware/auth.middlewares");
+
+const authControllers = require("../controllers/auth.controller")
 
 module.exports = (app) => {
-  app.use("/", homeRouter);
+  
+  app.get("/", authControllers.login);
 
-  app.use("/home", homeRouter);
+  app.use("/home", authMiddlewares.requireAuth, homeRouter);
 
-  app.use("/employees", employeeRouter);
+  app.use("/employees", authMiddlewares.requireAuth , employeeRouter);
 
-  app.use("/payroll", payrollRouter);
+  app.use("/payroll", authMiddlewares.requireAuth, payrollRouter);
 
-  app.use("/reports", reportRouter);
+  app.use("/reports", authMiddlewares.requireAuth, reportRouter);
 
-  app.use("/departments", departmentRouter);
+  app.use("/departments", authMiddlewares.requireAuth, departmentRouter);
 
-  app.use("/jobs", jobRouter);
+  app.use("/jobs", authMiddlewares.requireAuth, jobRouter);
 
-  app.use("/attendance", attendanceRouter);
+  app.use("/attendance", authMiddlewares.requireAuth, attendanceRouter);
 
   app.use("/auth", authRouter);
+
+  app.use("/account", authMiddlewares.requireAuth, acRouter);
 
 };

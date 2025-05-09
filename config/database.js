@@ -34,6 +34,24 @@ const hrSequelize = new Sequelize(
   }
 );
 
+const authSequelize  = new Sequelize(
+  process.env.AUTH_DB_NAME,
+  process.env.AUTH_DB_USER,
+  process.env.AUTH_DB_PASS,
+  {
+    host: process.env.AUTH_DB_HOST,
+    port: 1433,
+    dialect: "mssql",
+    dialectOptions: {
+      options: {
+        encrypt: false,
+        trustServerCertificate: true,
+      },
+    },
+    logging: false,
+  }
+);
+
 
 const connectDB = async () => {
   try {
@@ -42,6 +60,9 @@ const connectDB = async () => {
 
     await hrSequelize.authenticate();
     console.log("✅ Connected to HR System (SQL Server) successfully.");
+
+    await authSequelize.authenticate();
+    console.log("✅ Connected to AUTH (SQL Server) successfully.");
   } catch (error) {
     console.error("❌ Database connection error:", error);
   }
@@ -51,5 +72,6 @@ const connectDB = async () => {
 module.exports = {
   payrollSequelize,
   hrSequelize,
+  authSequelize,
   connectDB,
 };

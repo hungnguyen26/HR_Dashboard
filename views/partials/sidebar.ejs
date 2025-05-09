@@ -19,58 +19,72 @@
             <span>Trang tổng quan</span>
         </a>
     </li>
-
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="/employees" >
-            <i class="fa-solid fa-person"></i>
-            <span>Quản lý nhân viên</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa-solid fa-money-bill"></i>
-            <span>Bảng lương&Chấm công </span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="/payroll ">Quản lý bảng lương</a>
-                <a class="collapse-item" href="/attendance">Quản lý chấm công</a>
+    <% if (Role.includes("Amin") || Role.includes("HR Manager")) { %>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/employees" >
+                <i class="fa-solid fa-person"></i>
+                <span>Quản lý nhân viên</span>
+            </a>
+        </li>
+    <% } %>
+    <% if (Role.includes("Admin") || Role.includes("Payroll Manager")) { %>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fa-solid fa-money-bill"></i>
+                <span>Bảng lương&Chấm công </span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="/payroll ">Quản lý bảng lương</a>
+                    <a class="collapse-item" href="/attendance">Quản lý chấm công</a>
+                </div>
             </div>
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fa-solid fa-building-user"></i>
-            <span>Phòng ban & Chức vụ </span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="/departments ">Phòng Ban</a>
-                <a class="collapse-item" href="/jobs">Chức Vụ</a>
+        </li>
+    <% } %>
+    <% if (Role.includes("Admin") || Role.includes("HR Manager")) { %>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fa-solid fa-building-user"></i>
+                <span>Phòng ban & Chức vụ </span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="/departments ">Phòng Ban</a>
+                    <a class="collapse-item" href="/jobs">Chức Vụ</a>
+                </div>
             </div>
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="/reports" >
-            <i class="fa-solid fa-flag"></i>
-            <span>Báo cáo tổng hợp</span>
-        </a>
-    </li>
+        </li>
+    <% } %>
+    <% if (Role.includes("Admin")) { %>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/reports" >
+                <i class="fa-solid fa-flag"></i>
+                <span>Báo cáo tổng hợp</span>
+            </a>
+        </li>
+    <% } %>
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" >
             <i class="fa-solid fa-triangle-exclamation"></i>
             <span>Cảnh báo</span>
         </a>
     </li>
+    <% if (Role.includes("Admin")) { %>
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" >
+        <a class="nav-link collapsed" href="/account" >
             <!-- <i class="fa-solid fa-money-bill"></i> -->
-            <span>Phân quyền</span>
+            <span>Tài khoản</span>
         </a>
     </li>
-   
+    <% } %>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="auth/logout" >
+            <!-- <i class="fa-solid fa-money-bill"></i> -->
+            <span>Đăng xuất</span>
+        </a>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
