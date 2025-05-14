@@ -1,60 +1,58 @@
 <% if (Role.includes("Admin") || Role.includes("Payroll Manager")) { %>
-
 <div class="mt-5">
   <div class="row">
     <div class="col-12 mx-auto">
       <div class="d-flex justify-content-between">
-        <h4>Thêm mới bảng lương</h4>
-        <%- include('../../partials/alert', { messages: messages, time: "5000"
-        }) %>
+        <h4>Chỉnh sửa bảng lương</h4>
+        <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
       </div>
 
       <hr />
 
       <form
-        action="/payroll/create"
+        action="/payroll/edit/<%= salary.SalaryID %>?_method=PATCH"
         method="POST"
         style="width: 40%; margin: 0 auto"
       >
+        <input type="hidden" id="StandardWorkingDays" value="22" />
+        <input type="hidden" name="SalaryMonth" value="<%= salary.SalaryMonth %>" />
+        <input type="hidden" name="EmployeeID" value="<%= salary.EmployeeID %>" />
+
         <div class="form-group">
-          <label for="EmployeeID" class="form-label">Nhân viên</label>
-          <select
-            class="form-control"
-            id="EmployeeID"
-            name="EmployeeID"
-            required
-          >
-            <option value="">-- Chọn nhân viên --</option>
-            <% employees.forEach(emp => { %>
-            <option value="<%= emp.EmployeeID %>">
-              <%= emp.EmployeeID %> - <%= emp.FullName %>
-            </option>
-            <% }) %>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="SalaryMonth">Tháng lương</label>
+          <label for="EmployeeID_Display">Nhân viên</label>
           <input
-            type="month"
-            name="SalaryMonth"
-            id="SalaryMonth"
+            type="text"
+            id="EmployeeID_Display"
             class="form-control"
-            required
+            value="<%= employee.EmployeeID %> - <%= employee.FullName %>"
+            disabled
           />
         </div>
 
-        <div class="form-group d-none" id="working-days-group">
+        <div class="form-group">
+          <label for="SalaryMonth_Display">Tháng lương</label>
+          <input
+            type="month"
+            id="SalaryMonth_Display"
+            class="form-control"
+            value="<%= new Date(salary.SalaryMonth).getFullYear() + '-' + (new Date(salary.SalaryMonth).getMonth() + 1).toString().padStart(2, '0') %>"
+            disabled
+          />
+        </div>
+
+        <div class="form-group">
           <label>Số ngày công:</label>
           <input
             type="text"
             id="WorkingDays"
             class="form-control"
             name="WorkingDays"
+            value="<%= salary.WorkingDays %>"
             readonly
           />
         </div>
 
-        <div id="salary-fields" class="d-none">
+        <div id="salary-fields">
           <div class="form-group">
             <label for="BaseSalary">Lương cơ bản (VNĐ)</label>
             <input
@@ -62,6 +60,7 @@
               name="BaseSalary"
               id="BaseSalary"
               class="form-control"
+              value="<%= salary.BaseSalary %>"
               required
             />
           </div>
@@ -73,7 +72,7 @@
               name="Bonus"
               id="Bonus"
               class="form-control"
-              value="0"
+              value="<%= salary.Bonus %>"
             />
           </div>
 
@@ -84,11 +83,9 @@
               name="Deductions"
               id="Deductions"
               class="form-control"
-              value="0"
+              value="<%= salary.Deductions %>"
             />
           </div>
-
-          <input type="hidden" id="StandardWorkingDays" value="22" />
 
           <div class="form-group">
             <label for="NetSalary">Lương thực nhận (VNĐ)</label>
@@ -97,6 +94,7 @@
               name="NetSalary"
               id="NetSalary"
               class="form-control"
+              value="<%= salary.NetSalary %>"
               readonly
               required
             />
@@ -104,13 +102,14 @@
         </div>
 
         <button type="submit" class="btn btn-primary mt-3">
-          Lưu bảng lương
+          Cập nhật bảng lương
         </button>
         <a href="/payroll" class="btn btn-secondary mt-3">Quay lại</a>
       </form>
     </div>
   </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   function calculateNetSalary() {
@@ -125,11 +124,9 @@
     $("#NetSalary").val(Math.round(net));
   }
 
-  $("#BaseSalary, #Bonus, #Deductions").on("input", calculateNetSalary);
-
   function fetchAttendanceDays() {
-    const empId = $("#EmployeeID").val();
-    const month = $("#SalaryMonth").val();
+    const empId = $("input[name='EmployeeID']").val();
+    const month = $("input[name='SalaryMonth']").val();
 
     if (empId && month) {
       $.ajax({
@@ -138,21 +135,21 @@
         data: { EmployeeID: empId, AttendanceMonth: month },
         success: function (data) {
           $("#WorkingDays").val(data.days || 0);
-          $("#working-days-group").removeClass("d-none");
-          $("#salary-fields").removeClass("d-none");
-          calculateNetSalary();
+          calculateNetSalary(); // tính lại NetSalary sau khi có WorkingDays
         },
         error: function () {
           alert("Không thể lấy số ngày công.");
-          $("#working-days-group").addClass("d-none");
-          $("#salary-fields").addClass("d-none");
         },
       });
     }
   }
 
-  $("#EmployeeID, #SalaryMonth").on("change", fetchAttendanceDays);
+  $(document).ready(function () {
+    fetchAttendanceDays(); // tự động gọi khi load trang
+    $("#BaseSalary, #Bonus, #Deductions").on("input", calculateNetSalary);
+  });
 </script>
+
 <% } else { %>
   <div class="alert alert-danger mt-5 text-center">
     Bạn không có quyền truy cập trang này.
