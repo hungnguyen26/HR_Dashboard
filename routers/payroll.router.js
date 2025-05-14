@@ -9,4 +9,6 @@ router.get('/create', controller.createPayroll);
 
 router.post('/create', controller.createPayrollPost);
 
+router.get('/mine', controller.minePayroll);
+
 module.exports = router;

@@ -65,17 +65,19 @@
             </a>
         </li>
     <% } %>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" >
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>Cảnh báo</span>
-        </a>
-    </li>
     <% if (Role.includes("Admin")) { %>
     <li class="nav-item">
         <a class="nav-link collapsed" href="/account" >
             <i class="fa-solid fa-users"></i>
             <span>Tài khoản</span>
+        </a>
+    </li>
+    <% } %>
+    <% if (Role.includes("Employee")) { %>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="/payroll/mine" >
+            <i class="fa-solid fa-money-bill"></i>
+            <span>Lương cá nhân</span>
         </a>
     </li>
     <% } %>

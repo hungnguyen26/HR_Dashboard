@@ -1,0 +1,47 @@
+<% if (Role.includes("Employee")) { %>
+  <div class="mt-5">
+    <div class="row">
+      <div class="col-12 mx-auto">
+        <div class="d-flex justify-content-between">
+          <h4>Bảng lương cá nhân </h4>
+        </div>
+
+        <%- include('../../partials/alert', { messages: messages, time: "5000" }) %>
+
+        <hr />
+        <% if (salaries.length === 0) { %>
+          <div class="alert alert-info">Chưa có dữ liệu bảng lương.</div>
+        <% } else { %>
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Tháng</th>
+                <th scope="col">Ngày công</th>
+                <th scope="col">Lương cơ bản</th>
+                <th scope="col">Thưởng</th>
+                <th scope="col">Khấu trừ</th>
+                <th scope="col">Lương thực nhận</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% salaries.forEach(s => { %>
+                <tr>
+                  <td><%= s.SalaryMonth %></td>
+                  <td><%= s.WorkDays %></td>
+                  <td><%= s.BaseSalary.toLocaleString("vi-VN") %> đ</td>
+                  <td><%= s.Bonus.toLocaleString("vi-VN") %> đ</td>
+                  <td><%= s.Deductions.toLocaleString("vi-VN") %> đ</td>
+                  <td><strong><%= s.NetSalary.toLocaleString("vi-VN") %> đ</strong></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </div>
+  </div>
+<% } else { %>
+  <div class="alert alert-danger mt-5 text-center">
+    Bạn không có quyền truy cập trang này.
+  </div>
+<% } %>

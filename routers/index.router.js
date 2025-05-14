@@ -7,6 +7,7 @@ const jobRouter = require("./jobs.router");
 const attendanceRouter = require("./attendance.router");
 const authRouter = require("./auth.router");
 const acRouter = require("./account.router");
+const alertRouter = require("./alert.router");
 const authMiddlewares = require("../middleware/auth.middlewares");
 
 const authControllers = require("../controllers/auth.controller")
@@ -32,5 +33,7 @@ module.exports = (app) => {
   app.use("/auth", authRouter);
 
   app.use("/account", authMiddlewares.requireAuth, acRouter);
+
+  // app.use("/alerts", authMiddlewares.requireAuth, alertRouter);
 
 };

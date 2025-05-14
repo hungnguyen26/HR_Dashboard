@@ -9,23 +9,90 @@
         <hr />
 
   <!-- Tổng quan nhân sự -->
-  <div class="cart mb-3">
-    <h4>Tổng quan nhân sự</h4>
-    <ul>
-      <li>Tổng số nhân viên: <%= totalEmployees %></li>
-      <li>
-        Nam: <%= employeesByGender.find(g => g.Gender === 'Nam')?.count || 0 %> |
-        Nữ: <%= employeesByGender.find(g => g.Gender === 'Nữ')?.count || 0 %>
-      </li>
-      <li>
-        Đang làm việc: 
-        <%= cleanEmployees.filter(e => e.Status !== 'Nghỉ việc').length %> |
-        Nghỉ việc: 
-        <%= cleanEmployees.filter(e => e.Status === 'Nghỉ việc').length %>
-    </li>
+  <div class="row">
 
-    </ul>
-  </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                          <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                              <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Tổng số nhân viên
+                                  </div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <%= totalEmployees %>
+                                  </div>
+                                </div>
+                                <div class="col-auto">
+                                  <i class="fas fa-users fa-2x text-gray-300"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                         <div class="col-xl-3 col-md-6 mb-4">
+                          <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                              <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Đang làm việc
+                                  </div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <%= cleanEmployees.filter(e => e.Status !== 'Nghỉ việc').length %>
+                                  </div>
+                                </div>
+                                <div class="col-auto">
+                                  <i class="fas fa-user-check fa-2x text-gray-300"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Nhân viên nghỉ việc -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                          <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                              <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Nghỉ việc
+                                  </div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <%= cleanEmployees.filter(e => e.Status === 'Nghỉ việc').length %>
+                                  </div>
+                                </div>
+                                <div class="col-auto">
+                                  <i class="fas fa-user-times fa-2x text-gray-300"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                          <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                              <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Giới tính
+                                  </div>
+                                  <div class="h6 mb-0 text-gray-800">
+                                    Nam: <%= employeesByGender.find(g => g.Gender === 'Nam')?.count || 0 %> |
+                                    Nữ: <%= employeesByGender.find(g => g.Gender === 'Nữ')?.count || 0 %>
+                                  </div>
+                                </div>
+                                <div class="col-auto">
+                                  <i class="fas fa-venus-mars fa-2x text-gray-300"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
 
   <div class="row">
     <div class="col-md-6 mb-4">

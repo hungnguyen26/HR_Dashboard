@@ -159,3 +159,47 @@ module.exports.createPayrollPost = async (req, res) => {
     res.redirect("/payroll/create");
   }
 };
+
+// [GET] /payroll/mine
+module.exports.minePayroll = async (req, res) => {
+ const UserLocal = res.locals.User.dataValues;
+try {
+  const salaries = await dbPayroll.Salary.findAll({
+    where: { EmployeeID: UserLocal.EmployeeID },
+    order: [["SalaryMonth", "DESC"]],
+  });
+
+  const salariesWithAttendance = await Promise.all(
+    salaries.map(async (salary) => {
+      const salaryMonth = new Date(salary.SalaryMonth);
+      const firstDayOfMonth = new Date(salaryMonth.getFullYear(), salaryMonth.getMonth(), 1);
+
+      const attendance = await dbPayroll.Attendance.findOne({
+        where: {
+          EmployeeID: UserLocal.EmployeeID,
+          AttendanceMonth: firstDayOfMonth,
+        },
+      });
+
+      return {
+        ...salary.dataValues,
+        WorkDays: attendance ? attendance.WorkDays : 0,
+        AbsentDays: attendance ? attendance.AbsentDays : 0,
+        LeaveDays: attendance ? attendance.LeaveDays : 0,
+      };
+    })
+  );
+
+  // console.log(salariesWithAttendance);
+  
+
+  res.render("pages/payroll/mine", {
+    pageTitle: "Bảng lương cá nhân",
+    salaries: salariesWithAttendance,
+  });
+} catch (err) {
+  console.error(err);
+  req.flash("thatbai", "Lỗi khi tải bảng lương");
+  return res.redirect(req.get("Referrer") || "/");
+}
+};
