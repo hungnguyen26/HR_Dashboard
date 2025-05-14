@@ -85,9 +85,24 @@
               <td><%= salary.NetSalary.toLocaleString() %> đ</td>
               <td><%= salary.CreatedAt.toLocaleString('vi-VN') %></td>
               <td>
-                <a href="/payroll/edit/<%= salary.SalaryID %>" class="btn btn-sm btn-warning">Sửa</a>
-                <a href="/payroll/delete/<%= salary.SalaryID %>" class="btn btn-sm btn-danger">Xóa</a>
-              </td>
+                  <div class="d-flex align-items-center">
+                    <a href="/payroll/edit/<%= salary.SalaryID %>" class="btn btn-warning btn-sm mx-2 d-flex align-items-center justify-content-center">
+                       Cập nhật
+                    </a>
+                  
+                    <form 
+                       action="/payroll/delete/<%= salary.SalaryID %>?_method=DELETE"
+                      method="POST" 
+                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa bản lương không?')"
+                      class="m-0 p-0 d-inline"
+                    >
+                      <button type="submit" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center" title="Xóa">
+                         Xóa
+                      </button>
+                    </form>
+                  </div>
+                  
+                </td>
             </tr>
           <% }) %>
         </tbody>

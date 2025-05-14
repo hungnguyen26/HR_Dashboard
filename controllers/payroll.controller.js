@@ -200,7 +200,7 @@ module.exports.editPayrollPatch = async (req, res) => {
     const salary = await dbPayroll.Salary.findByPk(SalaryID);
     
     if (!salary) {
-      req.flash("error", "Không tìm thấy bản ghi lương.");
+      req.flash("thatbai", "Không tìm thấy bản ghi lương.");
       console.log("loidfdsifhsihdf");
       
       return res.redirect("/payroll");
@@ -217,10 +217,34 @@ module.exports.editPayrollPatch = async (req, res) => {
     res.redirect("/payroll");
   } catch (err) {
     console.error("Lỗi cập nhật bảng lương:", err);
-    req.flash("error", "Đã xảy ra lỗi khi cập nhật bảng lương.");
+    req.flash("thatbai", "Đã xảy ra lỗi khi cập nhật bảng lương.");
     res.redirect("/payroll");
   }
 };
+
+// [DELETE] /payroll/delete/{id}
+module.exports.deletePayroll = async (req, res) => {
+  const SalaryID = req.params.id;
+
+  try {
+    const salary = await dbPayroll.Salary.findByPk(SalaryID);
+
+    if (!salary) {
+      req.flash("thatbai", "Không tìm thấy bảng lương cần xóa.");
+      return res.redirect("/payroll");
+    }
+
+    await salary.destroy();
+
+    req.flash("thanhcong", "Xóa bảng lương thành công!");
+    res.redirect("/payroll");
+  } catch (err) {
+    console.error("Lỗi khi xóa bảng lương:", err);
+    req.flash("thatbai", "Đã xảy ra lỗi khi xóa bảng lương.");
+    res.redirect("/payroll");
+  }
+};
+
 
 // [GET] /payroll/mine
 module.exports.minePayroll = async (req, res) => {
