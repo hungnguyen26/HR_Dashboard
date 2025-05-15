@@ -34,6 +34,6 @@ module.exports = (app) => {
 
   app.use("/account", authMiddlewares.requireAuth, acRouter);
 
-  // app.use("/alerts", authMiddlewares.requireAuth, alertRouter);
+  app.use("/alerts", authMiddlewares.requireAuth, alertRouter);
 
 };

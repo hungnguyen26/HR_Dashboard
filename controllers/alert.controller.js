@@ -1,101 +1,86 @@
-// const moment = require('moment');
-// const { Employee } = require('../model/human/index.model');
-// const { Salary } = require('../model/payroll/index.model');
+const { Op, Sequelize  } = require('sequelize');
+const dbHuman = require('../model/human/index.model'); 
+const dbPayroll = require('../model/payroll/index.model'); 
 
-// // Cảnh báo kỷ niệm ngày làm việc
-// const getAnniversaryAlerts = async () => {
-//   const employees = await Employee.findAll();
-//   const today = moment();
+module.exports.index = async (req, res) => {
+  try {
+    const currentUser = res.locals.User;
 
-//   return employees
-//     .map(emp => {
-//       const startDate = moment(emp.StartDate);
-//       const years = today.diff(startDate, 'years');
-//       const nextAnniversary = startDate.clone().add(years + 1, 'years');
-//       const daysUntil = nextAnniversary.diff(today, 'days');
+    const employee = await dbHuman.Employee.findOne({
+      where: { Email: currentUser.Email }
+    });
 
-//       if (daysUntil <= 30 && daysUntil >= 0) {
-//         return {
-//           employee: emp,
-//           message: `Nhân viên ${emp.FullName} sắp kỷ niệm ${years + 1} năm làm việc vào ngày ${nextAnniversary.format('DD/MM/YYYY')}.`
-//         };
-//       }
-//       return null;
-//     })
-//     .filter(alert => alert !== null);
-// };
+    if (!employee) {
+      req.flash('error', 'Không tìm thấy thông tin nhân viên.');
+      return res.redirect('/');
+    }
 
-// // Cảnh báo ngày nghỉ phép
-// const getLeaveAlerts = async () => {
-//   const employees = await Employee.findAll();
+    const alerts = [];
 
-//   return employees
-//     .map(emp => {
-//       const usedLeave = emp.UsedLeaveDays;
-//       const remainingLeave = emp.TotalLeaveDays - usedLeave;
+    const today = new Date();
+    const hireDate = new Date(employee.HireDate);
+    let anniversary = new Date(today.getFullYear(), hireDate.getMonth(), hireDate.getDate());
+    if (anniversary < today) anniversary.setFullYear(today.getFullYear() + 1);
+    const diffDays = Math.ceil((anniversary - today) / (1000 * 60 * 60 * 24));
+    if (diffDays <= 7) {
+      alerts.push({
+        type: 'work-anniversary',
+        message: `🎉 Sắp đến ngày kỷ niệm làm việc (${diffDays} ngày nữa)!`
+      });
+    }
 
-//       if (usedLeave / emp.TotalLeaveDays >= 0.8) {
-//         return {
-//           employee: emp,
-//           message: `Nhân viên ${emp.FullName} đã sử dụng ${usedLeave} ngày phép, chiếm hơn 80% tổng số ngày phép.`
-//         };
-//       } else if (remainingLeave <= 5) {
-//         return {
-//           employee: emp,
-//           message: `Nhân viên ${emp.FullName} chỉ còn ${remainingLeave} ngày phép.`
-//         };
-//       }
-//       return null;
-//     })
-//     .filter(alert => alert !== null);
-// };
+    const leaveStats = await dbPayroll.Attendance.findAll({
+      where: {
+        EmployeeID: employee.EmployeeID,
+        AttendanceMonth: {
+          [Op.gte]: Sequelize.literal(`DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 3 MONTH), '%Y-%m-01')`)
+        }
+      },
+      attributes: [
+        [Sequelize.fn('SUM', Sequelize.col('LeaveDays')), 'totalLeaveDays']
+      ],
+      raw: true
+    });
 
-// // Cảnh báo chênh lệch lương
-// const getSalaryAlerts = async () => {
-//   const employees = await Employee.findAll();
-//   const salaryAlerts = [];
+    const totalLeave = parseFloat(leaveStats[0].totalLeaveDays || 0);
+    if (totalLeave >= 10) {
+      alerts.push({
+        type: 'leave-warning',
+        message: `⚠️ Bạn đã nghỉ phép ${totalLeave} ngày trong 3 tháng qua.`
+      });
+    }
 
-//   for (const emp of employees) {
-//     const salaries = await Salary.findAll({
-//       where: { EmployeeID: emp.EmployeeID },
-//       order: [['SalaryMonth', 'DESC']],
-//       limit: 2
-//     });
+    const salaryData = await dbPayroll.Salary.findAll({
+      where: {
+        EmployeeID: employee.EmployeeID
+      },
+      order: [['SalaryMonth', 'DESC']],
+      limit: 2,
+      raw: true
+    });
 
-//     if (salaries.length === 2) {
-//       const [latest, previous] = salaries;
-//       const diff = Math.abs(latest.NetSalary - previous.NetSalary);
-//       const diffPercent = (diff / previous.NetSalary) * 100;
+    if (salaryData.length === 2) {
+      const currentSalary = parseFloat(salaryData[0].NetSalary || salaryData[0].TotalSalary || 0);
+      const previousSalary = parseFloat(salaryData[1].NetSalary || salaryData[1].TotalSalary || 0);
 
-//       if (diffPercent >= 20) {
-//         salaryAlerts.push({
-//           employee: emp,
-//           message: `Lương của nhân viên ${emp.FullName} thay đổi ${diffPercent.toFixed(2)}% giữa tháng ${previous.SalaryMonth} và ${latest.SalaryMonth}.`
-//         });
-//       }
-//     }
-//   }
+      const diff = Math.abs(currentSalary - previousSalary);
+      const percentDiff = (diff / previousSalary) * 100;
 
-//   return salaryAlerts;
-// };
+      if (percentDiff >= 20) {
+        alerts.push({
+          type: 'salary-diff',
+          message: `💸 Cảnh báo: Lương tháng này thay đổi ${percentDiff.toFixed(2)}% so với tháng trước.`
+        });
+      }
+    }
 
-// // Controller chính cho router /alerts
-// module.exports.index = async (req, res) => {
-//   try {
-//     const [anniversaryAlerts, leaveAlerts, salaryAlerts] = await Promise.all([
-//       getAnniversaryAlerts(),
-//       getLeaveAlerts(),
-//       getSalaryAlerts()
-//     ]);
+    res.render('pages/alerts/index.ejs', {
+      pageTitle: 'Thông báo',
+      alerts,
+    });
 
-//     res.render('pages/alerts/index.ejs', {
-//     pageTitle :"Thông báo",
-//       anniversaryAlerts,
-//       leaveAlerts,
-//       salaryAlerts
-//     });
-//   } catch (error) {
-//     console.error('Lỗi khi lấy dữ liệu cảnh báo:', error);
-//     res.status(500).send('Đã xảy ra lỗi khi lấy dữ liệu cảnh báo.');
-//   }
-// };
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu cảnh báo:', error);
+    res.status(500).send('Đã xảy ra lỗi khi lấy dữ liệu cảnh báo.');
+  }
+};

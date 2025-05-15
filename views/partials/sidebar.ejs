@@ -82,6 +82,15 @@
     </li>
     <% } %>
 
+    <% if (Role.includes("Employee")) { %>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="/alerts" >
+            <i class="fa-solid fa-bell"></i>
+            <span>Cảnh báo</span>
+        </a>
+    </li>
+    <% } %>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

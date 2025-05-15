@@ -1,0 +1,21 @@
+<% if (Role.includes("Employee")) { %>
+<div class="mt-5">
+  <div class="row">
+    <div class="col-12 mx-auto">
+      <div class="d-flex justify-content-between">
+        <h4>Cảnh báo & thông báo</h4>
+      </div>
+
+      <hr />
+      <% if (alerts.length === 0) { %>
+      <div class="alert alert-info">Không có thông báo nào.</div>
+      <% } else { %> <% alerts.forEach(alert => { %>
+      <div class="alert alert-warning"><%= alert.message %></div>
+      <% }) %> <% } %> <% } else { %>
+      <div class="alert alert-danger mt-5 text-center">
+        Bạn không có quyền truy cập trang này.
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
