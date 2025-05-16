@@ -27,11 +27,20 @@ module.exports.index = async (req,res)=>{
 }
 
 // [GET] /account/create
-module.exports.createAccount = async (req,res)=>{
-    res.render("pages/account/create.ejs", {
-        pageTitle: "Thêm tài khoản",
-    });
-}
+module.exports.createAccount = async (req, res) => {
+    try {
+        const allRoles = await dbAuth.Role.findAll(); 
+
+        res.render("pages/account/create.ejs", {
+            pageTitle: "Thêm tài khoản",
+            allRoles, 
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Lỗi khi tải form tạo tài khoản.");
+    }
+};
+
 
 // [POST] /account/create
 module.exports.createAccountPost = async (req,res)=>{
@@ -90,6 +99,93 @@ module.exports.createAccountPost = async (req,res)=>{
     
 }
 
+// [GET] /account/edit/:id
+module.exports.editAccount = async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const user = await dbAuth.User.findByPk(userId, {
+            include: [{
+                model: dbAuth.Role,
+                as: 'Roles',
+                attributes: ['RoleName'],
+            }]
+        });
+
+        const allRoles = await dbAuth.Role.findAll();
+
+        if (!user) {
+            req.flash("thatbai", "Không tìm thấy tài khoản.");
+            return res.redirect("/account");
+        }
+
+        res.render("pages/account/update.ejs", {
+            pageTitle: "Sửa tài khoản",
+            user,
+            allRoles,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Lỗi khi tải thông tin tài khoản.");
+    }
+};
+
+module.exports.editAccountPatch = async (req, res) => {
+    const userId = req.params.id;
+    const { fullName, email, roleNames, newPassword, confirmPassword } = req.body;
+
+    try {
+        const user = await dbAuth.User.findByPk(userId);
+        if (!user) {
+            req.flash("thatbai", "Không tìm thấy tài khoản.");
+            return res.redirect("/account");
+        }
+
+        const existingEmail = await dbAuth.User.findOne({
+            where: {
+                Email: email,
+                UserID: { [dbAuth.Sequelize.Op.ne]: userId }
+            }
+        });
+
+        if (existingEmail) {
+            req.flash("thatbai", "Email đã được sử dụng bởi tài khoản khác.");
+            return res.redirect("back");
+        }
+
+        if (newPassword || confirmPassword) {
+            if (newPassword !== confirmPassword) {
+                req.flash("thatbai", "Mật khẩu mới và xác nhận không khớp.");
+                return res.redirect("back");
+            }
+            user.PasswordHash = bcrypt.hashSync(newPassword, 10);
+        }
+
+        user.Username = fullName;
+        user.Email = email;
+        await user.save();
+
+        await dbAuth.UserRole.destroy({ where: { UserID: userId } });
+
+        const roles = await dbAuth.Role.findAll({
+            where: { RoleName: roleNames }  
+        });
+
+        const userRoles = roles.map(role => ({
+            UserID: userId,
+            RoleID: role.RoleID
+        }));
+        await dbAuth.UserRole.bulkCreate(userRoles);
+
+        req.flash("thanhcong", "Cập nhật tài khoản thành công!");
+        res.redirect("/account");
+
+    } catch (error) {
+        console.log(error);
+        req.flash("thatbai", "Cập nhật tài khoản thất bại!");
+        res.redirect("/account");
+    }
+}
 
 // [DELETE] /delete/:id
 module.exports.deleteAccount = async (req,res)=>{

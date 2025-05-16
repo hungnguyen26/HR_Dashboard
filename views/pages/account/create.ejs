@@ -66,20 +66,15 @@
 
         <!-- Quyền -->
         <div class="form-group">
-          <label for="role" class="form-label">Quyền</label>
-          <select
-            class="form-control"
-            id="role"
-            name="roleNames"
-            multiple
-            required
-          >
-            <option value="Admin">Admin</option>
-            <option value="HR Manager">HR Manager</option>
-            <option value="Payroll Manager">Payroll Manager</option>
-            <option value="Employee">Employee</option>
-          </select>
+          <label>Quyền</label><br/>
+          <% allRoles.forEach(role => { %>
+              <label class="mr-3">
+                  <input type="checkbox" name="roleNames" value="<%= role.RoleName %>" />
+                  <%= role.RoleName %>
+              </label>
+          <% }) %>
         </div>
+
 
         <button type="submit" class="btn btn-primary">Thêm tài khoản</button>
       </form>
