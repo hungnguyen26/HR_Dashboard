@@ -9,4 +9,6 @@ router.get('/create', controller.createAccount);
 
 router.post('/create', controller.createAccountPost);
 
+router.delete('/delete/:id', controller.deleteAccount);
+
 module.exports = router;

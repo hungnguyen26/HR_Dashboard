@@ -89,3 +89,32 @@ module.exports.createAccountPost = async (req,res)=>{
     
     
 }
+
+
+// [DELETE] /delete/:id
+module.exports.deleteAccount = async (req,res)=>{
+    const userId = req.params.id;
+
+    try {
+        const user = await dbAuth.User.findByPk(userId);
+        if (!user) {
+            req.flash("thatbai", "Không tìm thấy tài khoản.");
+            return res.redirect("/account");
+        }
+
+        await dbAuth.UserRole.destroy({
+            where: { UserID: userId }
+        });
+
+        await dbAuth.User.destroy({
+            where: { UserID: userId }
+        });
+
+        req.flash("thanhcong", "Xóa tài khoản thành công!");
+        res.redirect("/account");
+    } catch (error) {
+        console.error(error);
+        req.flash("thatbai", "Xóa tài khoản thất bại!");
+        res.redirect("/account");
+    }
+}
