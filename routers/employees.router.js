@@ -5,6 +5,8 @@ const controller = require("../controllers/employees.controller");
 
 router.get('/', controller.index);
 
+router.get('/:id', controller.viewEmployee);
+
 router.get('/create', controller.createEmployees);
 
 router.post('/create', controller.createEmployeesPost);

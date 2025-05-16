@@ -69,6 +69,35 @@ module.exports.index = async (req, res) => {
   }
 };
 
+// [GET] /employees/:id
+module.exports.viewEmployee = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const employee = await dbHuman.Employee.findOne({
+      where: { EmployeeID: id },
+      include: [
+        { model: dbHuman.Department },
+        { model: dbHuman.Position },
+      ],
+    });
+
+    if (!employee) {
+      req.flash("thatbai", "Không tìm thấy nhân viên!");
+      return res.redirect("/employees");
+    }
+
+    res.render("pages/employees/view.ejs", {
+      pageTitle: `Chi tiết nhân viên - ${employee.FullName}`,
+      employee,
+    });
+  } catch (error) {
+    console.error(error);
+    req.flash("thatbai", "Đã xảy ra lỗi khi lấy thông tin nhân viên!");
+    res.redirect("/employees");
+  }
+};
+
 
 // [GET] /employees/create
 module.exports.createEmployees = async (req, res) => {

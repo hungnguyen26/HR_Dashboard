@@ -1,0 +1,69 @@
+<% if (Role.includes("Admin") || Role.includes("HR Manager")) { %>
+<div class="mt-5">
+  <div class="row">
+    <div class="col-12 mx-auto">
+      <div class="d-flex justify-content-between">
+        <h4>Chi tiết nhân viên : <%= employee.FullName %> - <%= employee.PhoneNumber %></h4>
+      </div>
+
+      <hr />
+
+      <form style="width: 60%; margin: 0 auto">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Họ tên</label>
+            <input type="text" class="form-control" value="<%= employee.FullName %>" disabled />
+          </div>
+          <div class="form-group col-md-6">
+            <label>Ngày sinh</label>
+            <input type="date" class="form-control" value="<%= employee.DateOfBirth %>" disabled />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" class="form-control" value="<%= employee.Email %>" disabled />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>SĐT</label>
+            <input type="text" class="form-control" value="<%= employee.PhoneNumber %>" disabled />
+          </div>
+          <div class="form-group col-md-6">
+            <label>Giới tính</label>
+            <input type="text" class="form-control" value="<%= employee.Gender %>" disabled />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Ngày vào công ty</label>
+            <input type="date" class="form-control" value="<%= employee.HireDate %>" disabled />
+          </div>
+          <div class="form-group col-md-6">
+            <label>Phòng ban</label>
+            <input type="text" class="form-control" value="<%= employee.Department?.DepartmentName %>" disabled />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Chức vụ</label>
+            <input type="text" class="form-control" value="<%= employee.Position?.PositionName %>" disabled />
+          </div>
+          <div class="form-group col-md-6">
+            <label>Trạng thái</label>
+            <input type="text" class="form-control" value="<%= employee.Status %>" disabled />
+          </div>
+        </div>
+        <a href="/employees" class="btn btn-secondary mt-3">Quay lại</a>
+      </form>
+    </div>
+  </div>
+</div>
+<% } else { %>
+  <div class="alert alert-danger mt-5 text-center">
+    Bạn không có quyền truy cập trang này.
+  </div>
+<% } %>
